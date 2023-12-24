@@ -1,0 +1,10 @@
+**/node_modules
+**/logs
+**/build
+
+**/.env
+
+**/tsconfig.tsbuildinfo
+**/.eslintcache
+**/.vscode
+*.local

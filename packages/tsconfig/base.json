@@ -1,0 +1,13 @@
+{
+     "$schema": "https://json.schemastore.org/tsconfig",
+     "display": "Default",
+     "compilerOptions": {
+         "strict": true,
+         "target": "es2016",
+         "module": "commonjs",
+         "esModuleInterop": true,
+         "forceConsistentCasingInFileNames": true,
+         "resolveJsonModule": true,
+         "skipLibCheck": true
+     }
+ }
