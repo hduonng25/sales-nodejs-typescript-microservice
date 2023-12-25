@@ -1,5 +1,5 @@
 //TODO: https status
-export enum HttpStatus {
+export enum HttpsStatus {
     OK = 200,
     CREATED = 201,
     NO_CONTENT = 204,

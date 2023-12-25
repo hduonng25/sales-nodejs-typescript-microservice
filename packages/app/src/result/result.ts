@@ -1,13 +1,13 @@
-import { HttpStatus } from '../constant/status';
+import { HttpsStatus } from '../constant/status';
 import { Any } from 'utils';
 
 export interface ResultSuccess {
-    status: HttpStatus;
+    status: HttpsStatus;
     data: Any;
 }
 
 export interface ResultError {
-    status: HttpStatus;
+    status: HttpsStatus;
     code?: string;
     description?: {
         vi: string;

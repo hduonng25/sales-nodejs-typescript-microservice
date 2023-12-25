@@ -3,7 +3,7 @@ import logger from 'logger';
 import * as os from 'os';
 import { Any } from 'utils';
 import { AppConfigurations } from '../configs';
-import { HttpStatus } from '../constant/status';
+import { HttpsStatus } from '../constant/status';
 import errorList, { ErrorData, HttpError } from '../error';
 import { mask } from '../mask';
 import { Result, ResultError, ResultSuccess, error } from '../result';
@@ -56,12 +56,12 @@ function handleResult(
     appConfigs?: AppConfigurations,
 ): void {
     const environment = env || 'dev';
-    const statusCode = data.status ?? HttpStatus.BAD_REQUEST;
+    const statusCode = data.status ?? HttpsStatus.BAD_REQUEST;
     let responseData: Any;
 
     if (data.status > 300) {
         let resultError = data as ResultError;
-        if (environment === 'pro' && resultError.status === HttpStatus.METHOD_NOT_ALLOWED) {
+        if (environment === 'pro' && resultError.status === HttpsStatus.METHOD_NOT_ALLOWED) {
             resultError = error.urlNotFound(request.path);
         }
         let { lang } = request.headers;
@@ -118,7 +118,7 @@ function handleResult(
     response.status(statusCode).json(responseData);
 }
 
-const logResponse = (request_id: string, status_code: HttpStatus, body: Any, correlation_id?: string): void => {
+const logResponse = (request_id: string, status_code: HttpsStatus, body: Any, correlation_id?: string): void => {
     const response_time = new Date();
     const data = {
         request_id,
@@ -134,7 +134,7 @@ const logResponse = (request_id: string, status_code: HttpStatus, body: Any, cor
 export const notFoundMiddlewares = (req: Request, _: Response, next: NextFunction): void => {
     const requestedUrl = `${req.protocol}://${req.get('Host')}${req.url}`;
     const error = {
-        status: HttpStatus.NOT_FOUND,
+        status: HttpsStatus.NOT_FOUND,
         code: 'URL_NOT_FOUND',
         errors: [
             {

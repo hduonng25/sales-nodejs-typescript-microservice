@@ -1,6 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import jsonwebtoken, { VerifyOptions } from 'jsonwebtoken';
-import { HttpStatus } from '../constant';
+import { HttpsStatus } from '../constant';
 import { HttpError } from '../error';
 import { Payload } from '../request';
 import { ErrorDetail, error } from '../result';
@@ -47,7 +47,7 @@ export async function verifyToken(req: Request, _: Response, next: NextFunction)
     ];
     if (!token) {
         throw new HttpError({
-            status: HttpStatus.UNAUTHORIZED,
+            status: HttpsStatus.UNAUTHORIZED,
             code: 'NO_TOKEN',
             errors: errors,
         });
@@ -63,7 +63,7 @@ export async function verifyToken(req: Request, _: Response, next: NextFunction)
         });
         if (payload.type !== 'ACCESS_TOKEN' || expireAt === null) {
             return next({
-                status: HttpStatus.UNAUTHORIZED,
+                status: HttpsStatus.UNAUTHORIZED,
                 code: 'INVALID_TOKEN',
                 errors: errors,
             });
@@ -74,13 +74,13 @@ export async function verifyToken(req: Request, _: Response, next: NextFunction)
         const e: Error = error as Error;
         if (e.name && e.name === 'TokenExpiredError') {
             return next({
-                status: HttpStatus.UNAUTHORIZED,
+                status: HttpsStatus.UNAUTHORIZED,
                 code: 'TOKEN_EXPIRED',
                 errors: errors,
             });
         } else {
             return next({
-                status: HttpStatus.UNAUTHORIZED,
+                status: HttpsStatus.UNAUTHORIZED,
                 code: 'INVALID_TOKEN',
                 errors: errors,
             });

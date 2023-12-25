@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ValidationError, validationResult } from 'express-validator';
-import { HttpStatus } from '../constant/status';
+import { HttpsStatus } from '../constant/status';
 import { ResultError } from '../result';
 import { Middleware } from './common';
 import { Schema } from 'joi';
@@ -16,7 +16,7 @@ const handleValidation: Middleware = (req: Request, _: Response, next: NextFunct
             return { message, ...error };
         });
         const resultError: ResultError = {
-            status: HttpStatus.BAD_REQUEST,
+            status: HttpsStatus.BAD_REQUEST,
             errors: validationErrors,
             code: 'INVALID_DATA',
         };
@@ -61,7 +61,7 @@ function getRequestHandler(location: 'body' | 'query', schema: Schema): Middlewa
                 return { location, param, value, message };
             });
             const resultError: ResultError = {
-                status: HttpStatus.BAD_REQUEST,
+                status: HttpsStatus.BAD_REQUEST,
                 errors: validationErrors,
                 code: 'INVALID_DATA',
             };

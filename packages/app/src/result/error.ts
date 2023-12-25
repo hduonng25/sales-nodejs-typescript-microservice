@@ -1,10 +1,10 @@
 import { Any } from 'utils';
-import { HttpStatus } from '../constant/status';
+import { HttpsStatus } from '../constant/status';
 import { ResultError } from './result';
 
 export const actionNotAllowed = (): ResultError => {
     return {
-        status: HttpStatus.UNAUTHORIZED,
+        status: HttpsStatus.UNAUTHORIZED,
         code: 'ACTION_NOT_ALLOWED',
         errors: [
             {
@@ -17,7 +17,7 @@ export const actionNotAllowed = (): ResultError => {
 
 export const methodNotAllowed = (method: string): ResultError => {
     return {
-        status: HttpStatus.METHOD_NOT_ALLOWED,
+        status: HttpsStatus.METHOD_NOT_ALLOWED,
         code: 'METHOD_NOT_ALLOWED',
         errors: [
             {
@@ -33,7 +33,7 @@ export const exception = (e: Error): ResultError => {
     let stack = e.stack?.split('\n');
     stack = stack?.map((s) => s.trim());
     return {
-        status: HttpStatus.INTERNAL_SERVER,
+        status: HttpsStatus.INTERNAL_SERVER,
         code: 'INTERNAL_SERVER_ERROR',
         errors: [
             {
@@ -47,7 +47,7 @@ export const exception = (e: Error): ResultError => {
 
 export const syntax = (e: SyntaxError): ResultError => {
     return {
-        status: HttpStatus.INTERNAL_SERVER,
+        status: HttpsStatus.INTERNAL_SERVER,
         code: 'BODY_JSON_SYNTAX',
         errors: [
             {
@@ -58,9 +58,9 @@ export const syntax = (e: SyntaxError): ResultError => {
     };
 };
 
-export const service = (path: string): ResultError => {
+export const services = (path: string): ResultError => {
     return {
-        status: HttpStatus.INTERNAL_SERVER,
+        status: HttpsStatus.INTERNAL_SERVER,
         code: 'INTERNAL_SERVER_ERROR',
         errors: [
             {
@@ -84,7 +84,7 @@ export const invalidData = (params: {
 }): ResultError => {
     const _location = params.location || 'body';
     return {
-        status: HttpStatus.BAD_REQUEST,
+        status: HttpsStatus.BAD_REQUEST,
         code: 'INVALID_DATA',
         description: params.description,
         errors: [
@@ -100,7 +100,7 @@ export const invalidData = (params: {
 
 export const urlNotFound = (path: string): ResultError => {
     return {
-        status: HttpStatus.NOT_FOUND,
+        status: HttpsStatus.NOT_FOUND,
         code: 'URL_NOT_FOUND',
         errors: [
             {
@@ -116,7 +116,7 @@ export const notFound = (params: { location?: string; param?: string; value?: An
     const _location = params.location || 'param';
     const _param = params.param || 'id';
     return {
-        status: HttpStatus.NOT_FOUND,
+        status: HttpsStatus.NOT_FOUND,
         code: 'NOT_FOUND',
         errors: [
             {
@@ -131,7 +131,20 @@ export const notFound = (params: { location?: string; param?: string; value?: An
 
 export const database = (): ResultError => {
     return {
-        status: HttpStatus.INTERNAL_SERVER,
+        status: HttpsStatus.INTERNAL_SERVER,
         code: 'DATABASE_SERVER_ERROR',
+    };
+};
+
+export const baseError = (params: { location?: string; message?: string }): ResultError => {
+    return {
+        status: HttpsStatus.BAD_REQUEST,
+        code: 'INVALID_DATA',
+        errors: [
+            {
+                location: params.location,
+                message: params.message,
+            },
+        ],
     };
 };
