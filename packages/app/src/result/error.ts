@@ -112,7 +112,12 @@ export const urlNotFound = (path: string): ResultError => {
     };
 };
 
-export const notFound = (params: { location?: string; param?: string; value?: Any; message?: string }): ResultError => {
+export const notFound = (params: {
+    location?: string;
+    param?: string;
+    value?: Any;
+    message?: string;
+}): ResultError => {
     const _location = params.location || 'param';
     const _param = params.param || 'id';
     return {
@@ -136,7 +141,10 @@ export const database = (): ResultError => {
     };
 };
 
-export const baseError = (params: { location?: string; message?: string }): ResultError => {
+export const baseError = (params: {
+    location?: string;
+    message?: string;
+}): ResultError => {
     return {
         status: HttpsStatus.BAD_REQUEST,
         code: 'INVALID_DATA',

@@ -7,9 +7,15 @@ export const ok = (data: Any): ResultSuccess => {
 };
 
 export const created = (data: Any): ResultSuccess => {
-    return { status: HttpsStatus.CREATED, data: data };
+    return {
+        status: HttpsStatus.CREATED,
+        data: data,
+    };
 };
 
 export const noContent = (): ResultSuccess => {
-    return { status: HttpsStatus.NO_CONTENT, data: undefined };
+    return {
+        status: HttpsStatus.NO_CONTENT,
+        data: undefined,
+    };
 };

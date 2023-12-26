@@ -1,35 +1,40 @@
 import { v1 } from 'uuid';
-import { changePasswordBody, createUserBody, updateUserBody } from '~/interface/request';
+import {
+    changePasswordBody,
+    createUserBody,
+    updateUserBody,
+} from '~/interface/request';
 import Users from '~/model/user.model';
 import bcrypt from 'bcrypt';
-import { error, success } from 'app';
+import { Result, error, success } from 'app';
 import { sendMailcreateUser } from '~/service';
 import { checkExitsAccount } from '~/middleware/common';
+import { IUser } from '~/interface/model';
 
-export async function getListUser() {
+export async function getUser(): Promise<Result> {
     const list = await Users.find({});
     return success.ok(list);
 }
 
-export async function getByID(id: any) {
+export async function getByID(id: any): Promise<Result> {
     const user = await Users.findOne({ id: id });
     return success.ok(user);
 }
 
-export async function createUser(params: createUserBody) {
+export async function createUser(
+    params: createUserBody,
+): Promise<Result> {
     await checkExitsAccount({
         email: params.email,
+        phone: params.phone,
     });
-    const password = await bcrypt.hash(params.password.toString(), 10);
-    const check_email = await Users.findOne({ email: params.email });
-    const check_sdt = await Users.findOne({ phone: params.phone });
-    if (check_email || check_sdt)
-        return error.notFound({
-            location: 'email_duplicate, phone_duplicate',
-            message: 'trung email, trung so dien thoai',
-        });
 
-    const user = new Users({
+    const password = await bcrypt.hash(
+        params.password.toString(),
+        10,
+    );
+
+    const new_user: IUser = {
         id: v1(),
         name: params.name,
         adress: params.adress,
@@ -39,33 +44,34 @@ export async function createUser(params: createUserBody) {
         type: params.type,
         role: params.role,
         is_deleted: false,
-    });
+    };
 
+    const user = new Users(new_user);
     await user.save();
     await sendMailcreateUser(params.email, params.name);
     return success.ok(user);
 }
 
-export async function updateUser(params: updateUserBody) {
-    const check_email = await Users.findOne({ email: params.email });
-    const check_sdt = await Users.findOne({ phone: params.phone });
+export async function updateUser(
+    params: updateUserBody,
+): Promise<Result> {
+    await checkExitsAccount({
+        email: params.email,
+        phone: params.phone,
+        id: params.id,
+    });
 
-    if (check_email || check_sdt)
-        return error.notFound({
-            location: 'email_duplicate, phone_duplicate',
-            message: 'trung email, trung so dien thoai',
-        });
-
+    const update_user: IUser = {
+        name: params.name,
+        phone: params.phone,
+        adress: params.adress,
+        email: params.email,
+        is_deleted: params.is_deleted,
+    };
     const update = await Users.findOneAndUpdate(
         { id: params.id },
         {
-            $set: {
-                name: params.name,
-                phone: params.phone,
-                adress: params.adress,
-                email: params.email,
-                is_deleted: params.is_deleted,
-            },
+            $set: update_user,
         },
         { new: true },
     );
@@ -73,8 +79,12 @@ export async function updateUser(params: updateUserBody) {
     return success.ok(update);
 }
 
-export async function changePassword(params: changePasswordBody) {
-    const user = await Users.findOne({ id: params.id });
+export async function changePassword(
+    params: changePasswordBody,
+): Promise<Result> {
+    const user = await Users.findOne({
+        id: params.id,
+    });
     if (!user)
         return error.notFound({
             location: 'user_not_found',
@@ -83,8 +93,14 @@ export async function changePassword(params: changePasswordBody) {
             message: 'Khong tim thay user tuong ung',
         });
 
-    const checkPass = bcrypt.compareSync(params.password_old.toString(), user.password.toString());
-    const password = await bcrypt.hash(params.password_new.toString(), 10);
+    const checkPass = bcrypt.compareSync(
+        params.password_old.toString(),
+        user.password as string,
+    );
+    const password = await bcrypt.hash(
+        params.password_new.toString(),
+        10,
+    );
 
     if (!checkPass)
         return error.notFound({
@@ -92,7 +108,37 @@ export async function changePassword(params: changePasswordBody) {
             message: 'Mat khau cu khong dung',
         });
 
-    const update = await Users.findOneAndUpdate({ id: params.id }, { $set: { password: password } }, { new: true });
+    const update = await Users.findOneAndUpdate(
+        { id: params.id },
+        { $set: { password: password } },
+        { new: true },
+    );
 
     return success.ok(update);
+}
+
+export async function deleteOne(params: {
+    id: string;
+}): Promise<Result> {
+    const user = await Users.findOneAndUpdate(
+        { id: params.id },
+        { $set: { is_deleted: true } },
+        { new: true },
+    );
+    return success.ok(user);
+}
+
+export async function deleteMany(params: {
+    id: string[];
+}): Promise<Result> {
+    await Promise.all(
+        params.id.map(async (id: string) => {
+            await Users.findOneAndUpdate(
+                { id: id },
+                { $set: { is_deleted: true } },
+            );
+        }),
+    );
+
+    return success.ok('delele many successfuly');
 }

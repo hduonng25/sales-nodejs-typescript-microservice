@@ -9,14 +9,21 @@ import { setCorrelationId } from '../hook';
 //lay thong tin ve client(IP) va cac header lien quan toi source
 //gan them mot so thong tin vao req object de su dung o cac middleware ke tiep
 //log ra thong tin request
-export const requestInitialization = (req: Request, _: Response, next: NextFunction): void => {
+export const requestInitialization = (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): void => {
     const timeNow = new Date();
     req.request_id = v1();
     const body = JSON.parse(JSON.stringify(req.body));
     mask(body, ['password', 'accessToken', 'refreshToken']);
-    const client = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const sourceHostName = req.headers['x-forwarded-for-hostname'] || 'unknown';
-    const sourceNetName = req.headers['x-forwarded-for-netname'] || 'unknown';
+    const client =
+        req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const sourceHostName =
+        req.headers['x-forwarded-for-hostname'] || 'unknown';
+    const sourceNetName =
+        req.headers['x-forwarded-for-netname'] || 'unknown';
     const correlationId = req.headers['x-correlation-id'] || v1();
     req.source_hostname = String(sourceHostName);
     req.source_netname = String(sourceNetName);
@@ -35,6 +42,8 @@ export const requestInitialization = (req: Request, _: Response, next: NextFunct
         body,
     };
 
-    logger.info(JSON.stringify(data), { tags: ['request'] });
+    logger.info(JSON.stringify(data), {
+        tags: ['request'],
+    });
     next();
 };

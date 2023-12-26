@@ -29,7 +29,10 @@ export interface AppConfigurations {
 
 //TODO: configs logger
 export function configLogger(configs: AppConfigurations): void {
-    logger.config({ service: configs.service, ...configs.log });
+    logger.config({
+        service: configs.service,
+        ...configs.log,
+    });
 }
 
 //TODO: config axios

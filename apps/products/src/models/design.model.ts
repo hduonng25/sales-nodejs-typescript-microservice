@@ -1,22 +1,22 @@
-import mongoose from "mongoose";
-import { IDesign } from "~/interface/models";
+import mongoose from 'mongoose';
+import { IDesign } from '~/interface/models';
 
 const Design = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-  },
+    id: {
+        type: String,
+        required: true,
+    },
 
-  name: {
-    type: String,
-    required: false,
-  },
+    name: {
+        type: String,
+        required: false,
+    },
 
-  is_deleted: {
-    type: Boolean,
-    required: false,
-  },
+    is_deleted: {
+        type: Boolean,
+        required: false,
+    },
 });
 
-const Designs = mongoose.model<IDesign>("Design", Design);
+const Designs = mongoose.model<IDesign>('Design', Design);
 export default Designs;

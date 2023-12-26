@@ -5,6 +5,8 @@
 **/.env
 
 **/tsconfig.tsbuildinfo
+# **/package.json
+# **/tsconfig.json
 **/.eslintcache
 **/.vscode
 *.local

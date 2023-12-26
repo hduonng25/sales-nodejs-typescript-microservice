@@ -1,6 +1,10 @@
 import express, { Application, Router } from 'express';
 import 'express-async-errors';
-import { AppConfigurations, configAxios, configLogger } from './configs';
+import {
+    AppConfigurations,
+    configAxios,
+    configLogger,
+} from './configs';
 import { ConfigsRedis, setUriConnectMongo } from './database';
 import { notFoundMiddlewares } from './middlewares/result';
 import {
@@ -16,7 +20,10 @@ import {
 //TODO: Gọi hàm configLogger và configAxios để cấu hình logging và http client
 //TODO: hoi tao app Express roi gan vao cac middleware
 //TODO: cau hinh toi redis va mongodb
-const createApp = (applicationRouter: Router, configs: AppConfigurations): Application => {
+const createApp = (
+    applicationRouter: Router,
+    configs: AppConfigurations,
+): Application => {
     const env = configs.environment;
     configLogger(configs);
     configAxios(configs);

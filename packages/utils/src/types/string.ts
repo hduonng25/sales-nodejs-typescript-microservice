@@ -7,7 +7,11 @@ function get(path: string, obj: Any, fb = `$\{${path}}`): string {
     return path.split('.').reduce((res, key) => res[key] || fb, obj);
 }
 
-function parseImpl(this: string, map: Record<string, unknown>, fallback?: string): string {
+function parseImpl(
+    this: string,
+    map: Record<string, unknown>,
+    fallback?: string,
+): string {
     return this.replace(/\${.+?}/g, (match) => {
         const path = match.substring(2, match.length - 1).trim();
         return get(path, match, fallback);

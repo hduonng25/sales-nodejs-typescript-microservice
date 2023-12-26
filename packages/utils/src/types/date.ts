@@ -19,7 +19,10 @@ const addSecondsImpl = function (this: Date, seconds: number): void {
     this.setSeconds(this.getSeconds() + seconds);
 };
 
-const addMillisecondImpl = function (this: Date, milliseconds: number): void {
+const addMillisecondImpl = function (
+    this: Date,
+    milliseconds: number,
+): void {
     this.setMilliseconds(this.getMilliseconds() + milliseconds);
 };
 

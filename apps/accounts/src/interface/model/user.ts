@@ -1,19 +1,19 @@
 export interface IUser {
-    id: String;
+    id?: string;
 
-    name: String;
+    name?: string;
 
-    adress: String;
+    adress?: string;
 
-    phone: String;
+    phone?: string;
 
-    email: String;
+    email?: string;
 
-    password: String;
+    password?: string;
 
-    type: Boolean;
+    type?: boolean;
 
-    role: String;
+    role?: string;
 
-    is_deleted: Boolean;
+    is_deleted?: boolean;
 }

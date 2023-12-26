@@ -5,8 +5,10 @@ import 'winston-daily-rotate-file';
 import { LogstashTransport } from './transport';
 
 function getTransports(configs?: LoggerConfigurations): Transport[] {
-    const fileEnabled = configs?.logFileEnabled === 'true' ? true : false;
-    const logstashEnabled = configs?.logstashEnabled === 'true' ? true : false;
+    const fileEnabled =
+        configs?.logFileEnabled === 'true' ? true : false;
+    const logstashEnabled =
+        configs?.logstashEnabled === 'true' ? true : false;
     const logsPath = configs?.folderLogsPath || 'logs';
     const options = {
         file: {
@@ -27,9 +29,13 @@ function getTransports(configs?: LoggerConfigurations): Transport[] {
         },
     };
 
-    const transports: Transport[] = [new winston.transports.Console(options.console)];
+    const transports: Transport[] = [
+        new winston.transports.Console(options.console),
+    ];
     if (fileEnabled) {
-        const transport = new winston.transports.DailyRotateFile(options.file);
+        const transport = new winston.transports.DailyRotateFile(
+            options.file,
+        );
         transports.push(transport);
     }
     if (logstashEnabled) {
@@ -43,7 +49,11 @@ function getTransports(configs?: LoggerConfigurations): Transport[] {
         if (!logstashPort && !Number.isInteger(logstashPort)) {
             throw new Error('');
         }
-        if (!logstashProtocol && logstashProtocol != 'udp' && logstashProtocol != 'tcp') {
+        if (
+            !logstashProtocol &&
+            logstashProtocol != 'udp' &&
+            logstashProtocol != 'tcp'
+        ) {
             throw new Error('');
         }
         const transport = new LogstashTransport({
@@ -67,13 +77,17 @@ function getOptions(configs?: LoggerConfigurations): LoggerOptions {
             winston.format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss.SSS',
             }),
-            winston.format.printf((info: winston.Logform.TransformableInfo) => {
-                let tags = '';
-                if (info.tags && Array.isArray(info.tags)) {
-                    tags = info.tags.map((t) => `[${t}]`).join('');
-                }
-                return `${info.timestamp} [${info.level}]${service}${tags}: ${info.message}`;
-            }),
+            winston.format.printf(
+                (info: winston.Logform.TransformableInfo) => {
+                    let tags = '';
+                    if (info.tags && Array.isArray(info.tags)) {
+                        tags = info.tags
+                            .map((t) => `[${t}]`)
+                            .join('');
+                    }
+                    return `${info.timestamp} [${info.level}]${service}${tags}: ${info.message}`;
+                },
+            ),
         ),
         transports: getTransports(configs),
         exitOnError: false,
@@ -86,7 +100,10 @@ declare module 'winston' {
     }
 }
 
-function setConfiguration(this: winston.Logger, configs: LoggerConfigurations): void {
+function setConfiguration(
+    this: winston.Logger,
+    configs: LoggerConfigurations,
+): void {
     const options = getOptions(configs);
     this.configure(options);
 }

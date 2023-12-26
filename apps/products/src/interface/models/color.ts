@@ -1,9 +1,9 @@
 export interface IColor {
-  id: String;
+    id: String;
 
-  name: String;
+    name: String;
 
-  code: String;
+    code: String;
 
-  is_deleted: Boolean;
+    is_deleted: Boolean;
 }

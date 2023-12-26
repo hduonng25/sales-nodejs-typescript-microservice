@@ -10,7 +10,9 @@ export interface ServerLogstashInfomation {
 }
 
 export type LogstashTransportOptions = ServerLogstashInfomation &
-    Transport.TransportStreamOptions & { service: string };
+    Transport.TransportStreamOptions & {
+        service: string;
+    };
 
 export class LogstashTransport extends Transport {
     private host: string;
@@ -41,14 +43,17 @@ export class LogstashTransport extends Transport {
     sendLogByTcp(info: Any): void {
         const message = this.getMessage(info);
         const client = net
-            .createConnection({ host: this.host, port: this.port }, function () {
-                client.write(message, (err) => {
-                    client.destroy();
-                    if (err) {
-                        throw err;
-                    }
-                });
-            })
+            .createConnection(
+                { host: this.host, port: this.port },
+                function () {
+                    client.write(message, (err) => {
+                        client.destroy();
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                },
+            )
             .on('error', function (err) {
                 throw err;
             });

@@ -1,9 +1,9 @@
 export interface mailsOption {
-  to?: string;
+    to?: string;
 
-  subject?: string;
+    subject?: string;
 
-  text?: string;
+    text?: string;
 
-  html?: any;
+    html?: any;
 }

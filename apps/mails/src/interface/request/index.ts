@@ -1,1 +1,1 @@
-export * from "./mails.body";
+export * from './mails.body';

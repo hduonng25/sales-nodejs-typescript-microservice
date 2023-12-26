@@ -6,7 +6,9 @@ import { NextFunction } from 'express';
 import { error, success } from 'app';
 
 export async function login(params: loginBody) {
-    const user = await Users.findOne({ email: params.email });
+    const user = await Users.findOne({
+        email: params.email,
+    });
     if (!user)
         return error.notFound({
             location: 'user_not_found',
@@ -15,7 +17,10 @@ export async function login(params: loginBody) {
             message: 'khong tim thay user tuong ung',
         });
 
-    const checkPass = bcrypt.compareSync(params.password.toString(), user.password.toString());
+    const checkPass = bcrypt.compareSync(
+        params.password.toString(),
+        user.password as string,
+    );
 
     if (!checkPass)
         return error.notFound({

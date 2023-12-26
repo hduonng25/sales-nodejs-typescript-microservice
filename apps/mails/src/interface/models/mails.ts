@@ -1,13 +1,13 @@
 export interface IMails {
-  id: String;
+    id: String;
 
-  subject: String;
+    subject: String;
 
-  text: String;
+    text: String;
 
-  content: String;
+    content: String;
 
-  create_time: Date;
+    create_time: Date;
 
-  create_by: String;
+    create_by: String;
 }

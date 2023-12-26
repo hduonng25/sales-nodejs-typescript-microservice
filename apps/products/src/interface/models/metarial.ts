@@ -1,7 +1,7 @@
 export interface IMetarial {
-  id: String;
+    id: String;
 
-  name: String;
+    name: String;
 
-  is_deleted: String;
+    is_deleted: String;
 }

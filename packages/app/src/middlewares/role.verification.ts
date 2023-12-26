@@ -1,4 +1,9 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import {
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from 'express';
 import jsonwebtoken, { VerifyOptions } from 'jsonwebtoken';
 import { HttpsStatus } from '../constant';
 import { HttpError } from '../error';
@@ -36,8 +41,14 @@ export const setKeyVerify = (key: string): void => {
 
 //TODO: lay token tu header cua request, kiem tra xem hop le hay khong, neu khong tra ve loi 401
 //TODO: decode ra payload trong token roi them vao trong request de cac middleware va router tiep theo su dung
-export async function verifyToken(req: Request, _: Response, next: NextFunction): Promise<void> {
-    const option = { algorithm: 'RS256' } as VerifyOptions;
+export async function verifyToken(
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): Promise<void> {
+    const option = {
+        algorithm: 'RS256',
+    } as VerifyOptions;
     const token: string | undefined = req.header('token');
     const errors: ErrorDetail[] = [
         {
@@ -55,7 +66,9 @@ export async function verifyToken(req: Request, _: Response, next: NextFunction)
 
     try {
         const publicKey = keypublic;
-        const payload = <Payload>jsonwebtoken.verify(token, publicKey, option);
+        const payload = <Payload>(
+            jsonwebtoken.verify(token, publicKey, option)
+        );
         req.payload = payload;
         const expireAt = await getExpireTime({
             token,
@@ -88,7 +101,10 @@ export async function verifyToken(req: Request, _: Response, next: NextFunction)
     }
 }
 
-async function getExpireTime(params: { token: string; userId: string }): Promise<string | null> {
+async function getExpireTime(params: {
+    token: string;
+    userId: string;
+}): Promise<string | null> {
     if (redis.status !== 'ready') {
         await redis.connect();
     }

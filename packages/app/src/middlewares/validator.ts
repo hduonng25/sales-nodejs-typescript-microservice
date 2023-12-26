@@ -1,12 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { ValidationError, validationResult } from 'express-validator';
+import {
+    ValidationError,
+    validationResult,
+} from 'express-validator';
 import { HttpsStatus } from '../constant/status';
 import { ResultError } from '../result';
 import { Middleware } from './common';
 import { Schema } from 'joi';
 
 //TODO: dung de xe li validate tung cac middleware khac , bao loi validate va tra ve respone loi
-const handleValidation: Middleware = (req: Request, _: Response, next: NextFunction): void => {
+const handleValidation: Middleware = (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): void => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
         const validationErrors = error.array().map((e) => {
@@ -37,7 +44,10 @@ const query = (schema: Schema): Middleware => {
 };
 
 //TODO: khoi tao ham middleware validate dua tren viec truyen vao body hay query
-function getRequestHandler(location: 'body' | 'query', schema: Schema): Middleware {
+function getRequestHandler(
+    location: 'body' | 'query',
+    schema: Schema,
+): Middleware {
     return (req: Request, _: Response, next: NextFunction) => {
         let data: unknown;
         if (location === 'body') {
@@ -53,13 +63,23 @@ function getRequestHandler(location: 'body' | 'query', schema: Schema): Middlewa
         });
 
         if (result.error) {
-            const validationErrors = result.error.details.map((item) => {
-                const param = item.path.join('.');
-                const value = item.context?.value;
-                let message = item.message;
-                message = message.replace(`"${param}"`, `'${param}'`);
-                return { location, param, value, message };
-            });
+            const validationErrors = result.error.details.map(
+                (item) => {
+                    const param = item.path.join('.');
+                    const value = item.context?.value;
+                    let message = item.message;
+                    message = message.replace(
+                        `"${param}"`,
+                        `'${param}'`,
+                    );
+                    return {
+                        location,
+                        param,
+                        value,
+                        message,
+                    };
+                },
+            );
             const resultError: ResultError = {
                 status: HttpsStatus.BAD_REQUEST,
                 errors: validationErrors,

@@ -1,7 +1,7 @@
 export interface IDesign {
-  id: String;
+    id: String;
 
-  name: String;
+    name: String;
 
-  is_deleted: Boolean;
+    is_deleted: Boolean;
 }

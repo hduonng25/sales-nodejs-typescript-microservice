@@ -1,15 +1,15 @@
 export interface sendMailsCreateUserBody {
-  subject?: string;
+    subject?: string;
 
-  from?: string;
+    from?: string;
 
-  to?: string;
+    to?: string;
 
-  text?: string;
+    text?: string;
 
-  content?: string;
+    content?: string;
 
-  user?: string;
+    user?: string;
 
-  html?: string;
+    html?: string;
 }

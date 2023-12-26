@@ -6,7 +6,12 @@ import { AppConfigurations } from '../configs';
 import { HttpsStatus } from '../constant/status';
 import errorList, { ErrorData, HttpError } from '../error';
 import { mask } from '../mask';
-import { Result, ResultError, ResultSuccess, error } from '../result';
+import {
+    Result,
+    ResultError,
+    ResultSuccess,
+    error,
+} from '../result';
 import { Middleware } from './common';
 
 //TODO: middleware xu ly respone tra ve phia client
@@ -29,8 +34,16 @@ export function systemInfo() {
     });
     return { hostName, netName };
 }
-export default (env?: string, appConfigs?: AppConfigurations): Middleware => {
-    const func = (result: Result | Error, request: Request, response: Response, _: NextFunction): void => {
+export default (
+    env?: string,
+    appConfigs?: AppConfigurations,
+): Middleware => {
+    const func = (
+        result: Result | Error,
+        request: Request,
+        response: Response,
+        _: NextFunction,
+    ): void => {
         let data: ResultError | ResultSuccess;
         if (result instanceof SyntaxError) {
             data = error.syntax(result);
@@ -61,13 +74,18 @@ function handleResult(
 
     if (data.status > 300) {
         let resultError = data as ResultError;
-        if (environment === 'pro' && resultError.status === HttpsStatus.METHOD_NOT_ALLOWED) {
+        if (
+            environment === 'pro' &&
+            resultError.status === HttpsStatus.METHOD_NOT_ALLOWED
+        ) {
             resultError = error.urlNotFound(request.path);
         }
         let { lang } = request.headers;
         lang = lang ?? 'vi';
         const errorCode = resultError.code ?? 'UNKNOWN_ERROR';
-        const err = errorList.find((value: ErrorData) => value.errorCode === errorCode);
+        const err = errorList.find(
+            (value: ErrorData) => value.errorCode === errorCode,
+        );
         let description: string | undefined = undefined;
         if (resultError.description?.vi && lang === 'vi') {
             description = resultError.description.vi;
@@ -101,7 +119,11 @@ function handleResult(
         }
     }
     const maskedResponseData = { ...responseData };
-    mask(maskedResponseData, ['password', 'accessToken', 'refreshToken']);
+    mask(maskedResponseData, [
+        'password',
+        'accessToken',
+        'refreshToken',
+    ]);
     const correlationId = request.correlation_id;
     const request_id = request.request_id;
     const sourceHostName = request.source_hostname;
@@ -111,14 +133,26 @@ function handleResult(
     const processing_time = response_time - requested_time;
     const requestBody = JSON.parse(JSON.stringify(request.body));
     mask(requestBody, ['password', 'accessToken', 'refreshToken']);
-    const sourceService = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
+    const sourceService =
+        request.headers['x-forwarded-for'] ||
+        request.socket.remoteAddress;
     const url = request.url;
     const destService = appConfigs?.service;
-    logResponse(request_id, statusCode, maskedResponseData, correlationId);
+    logResponse(
+        request_id,
+        statusCode,
+        maskedResponseData,
+        correlationId,
+    );
     response.status(statusCode).json(responseData);
 }
 
-const logResponse = (request_id: string, status_code: HttpsStatus, body: Any, correlation_id?: string): void => {
+const logResponse = (
+    request_id: string,
+    status_code: HttpsStatus,
+    body: Any,
+    correlation_id?: string,
+): void => {
     const response_time = new Date();
     const data = {
         request_id,
@@ -127,12 +161,20 @@ const logResponse = (request_id: string, status_code: HttpsStatus, body: Any, co
         status_code,
         body,
     };
-    logger.info(JSON.stringify(data), { tags: ['response'] });
+    logger.info(JSON.stringify(data), {
+        tags: ['response'],
+    });
 };
 
 //TODO: kiem tra xem co router nao xu ly request khong, neu khong tra ra loi URL_NOT_FOUND
-export const notFoundMiddlewares = (req: Request, _: Response, next: NextFunction): void => {
-    const requestedUrl = `${req.protocol}://${req.get('Host')}${req.url}`;
+export const notFoundMiddlewares = (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): void => {
+    const requestedUrl = `${req.protocol}://${req.get('Host')}${
+        req.url
+    }`;
     const error = {
         status: HttpsStatus.NOT_FOUND,
         code: 'URL_NOT_FOUND',
