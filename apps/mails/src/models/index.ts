@@ -1,1 +1,1 @@
-export * from './mail.models';
+export { default as TemplatesMails } from './mail.models';

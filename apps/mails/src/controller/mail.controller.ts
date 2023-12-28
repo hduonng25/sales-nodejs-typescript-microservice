@@ -1,6 +1,7 @@
 import { Result, success } from 'app';
 import { config } from '~/configs/config';
 import { sendMailsCreateUserBody } from '~/interface/request';
+import { TemplatesMails } from '~/models';
 import { mails, sendMailsBase } from '~/services';
 
 export async function sendMailsCreateUser(

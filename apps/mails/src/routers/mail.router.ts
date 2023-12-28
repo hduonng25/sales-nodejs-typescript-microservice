@@ -5,12 +5,8 @@ export const router: Router = Router();
 
 router.post(
     '/',
-    async (
-        request: Request,
-        response: Response,
-        next: NextFunction,
-    ) => {
-        const body = request.body as sendMailsCreateUserBody;
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as sendMailsCreateUserBody;
         const result = await sendMailsCreateUser(body);
         next(result);
     },

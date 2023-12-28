@@ -20,6 +20,7 @@ const Color = new mongoose.Schema({
     is_deleted: {
         type: Boolean,
         required: false,
+        default: false,
     },
 });
 

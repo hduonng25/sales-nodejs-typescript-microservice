@@ -37,4 +37,5 @@ const TemplatesMails = mongoose.model<IMails>(
     'Mails',
     TemplatesMail,
 );
+
 export default TemplatesMails;
