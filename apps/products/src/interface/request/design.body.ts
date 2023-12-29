@@ -1,8 +1,8 @@
-export type CretaeSizeBody = {
+export type createDesignBody = {
     name: string;
 };
 
-export type UpdateSizeBody = {
+export type updateDesignBody = {
     id: string;
 
     name: string;

@@ -1,34 +1,33 @@
 import { HttpError, HttpsStatus } from 'app';
 import { FilterQuery } from 'mongoose';
-import { ISize } from '~/interface/models';
-import { Sizes } from '~/models';
+import { IDesign } from '~/interface/models';
+import { Designs } from '~/models';
 
-export async function CheckExitsSize(params: {
-    name?: string;
+export async function checkExitsDesign(params: {
     id?: string;
+    name?: string;
 }): Promise<void> {
-    const match: FilterQuery<ISize> = {
+    const match: FilterQuery<IDesign> = {
         name: {
             $regex: `^${params.name}$`,
             $options: 'i',
         },
-        is_deleted: false,
     };
 
-    const size = await Sizes.findOne(match);
-    if (size && size.id !== params.id) {
+    const design = await Designs.findOne(match);
+    if (design && design.id !== params.id) {
         throw new HttpError({
             status: HttpsStatus.BAD_REQUEST,
             code: 'INVALID_DATA',
             description: {
-                en: 'name already exitsts',
-                vi: 'Ten kich co da ton tai',
+                en: 'Name is already exits',
+                vi: 'Ten da ton tai',
             },
             errors: [
                 {
                     location: 'Name',
                     param: 'body',
-                    value: `${params.name}`,
+                    value: params.name,
                 },
             ],
         });
