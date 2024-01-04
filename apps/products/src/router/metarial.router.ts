@@ -1,21 +1,22 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
-    createSize,
-    deleteManySize,
-    deleteSize,
-    getByIDSize,
-    getListSizeByID,
-    getSize,
-    updateSize,
+    createMetarials,
+    deleteManyMetarials,
+    deleteMetarial,
+    getMetarials,
+    getMetarialsByID,
+    updateMetarial,
 } from '~/controller';
-import { CretaeSizeBody, UpdateSizeBody } from '~/interface/request';
-
+import {
+    createMaterialBody,
+    updateMaterialBody,
+} from '~/interface/request';
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getSize();
+        const result = await getMetarials();
         next(result);
     },
 );
@@ -24,16 +25,7 @@ router.get(
     '/:id',
     async (req: Request, _: Response, next: NextFunction) => {
         const { id } = req.params;
-        const result = await getByIDSize({ id });
-        next(result);
-    },
-);
-
-router.post(
-    '/list-id',
-    async (req: Request, _: Response, next: NextFunction) => {
-        const { id_size }: { id_size: string[] } = req.body;
-        const result = await getListSizeByID({ id_size });
+        const result = await getMetarialsByID({ id });
         next(result);
     },
 );
@@ -41,8 +33,8 @@ router.post(
 router.post(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const body = req.body as CretaeSizeBody;
-        const result = await createSize(body);
+        const body = req.body as createMaterialBody;
+        const result = await createMetarials(body);
         next(result);
     },
 );
@@ -50,8 +42,8 @@ router.post(
 router.put(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const body = req.body as UpdateSizeBody;
-        const result = await updateSize(body);
+        const body = req.body as updateMaterialBody;
+        const result = await updateMetarial(body);
         next(result);
     },
 );
@@ -59,8 +51,8 @@ router.put(
 router.put(
     '/delete',
     async (req: Request, _: Response, next: NextFunction) => {
-        const id: string = req.body.id;
-        const result = await deleteSize({ id });
+        const { id } = req.body;
+        const result = await deleteMetarial({ id });
         next(result);
     },
 );
@@ -69,7 +61,7 @@ router.put(
     '/delete-many',
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string[] = req.body.id;
-        const result = await deleteManySize({ id });
+        const result = await deleteManyMetarials({ id });
         next(result);
     },
 );

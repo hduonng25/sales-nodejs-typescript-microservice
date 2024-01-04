@@ -9,7 +9,8 @@ const Product = new mongoose.Schema({
 
     created_date: {
         type: Date,
-        default: Date.now,
+        required: false,
+        default: new Date(),
     },
 
     created_by: {
@@ -20,6 +21,7 @@ const Product = new mongoose.Schema({
     is_deleted: {
         type: Boolean,
         required: false,
+        default: false,
     },
 
     price: {
@@ -53,11 +55,13 @@ const Product = new mongoose.Schema({
             is_deleted: {
                 type: Boolean,
                 required: false,
+                default: false,
             },
 
             created_date: {
                 type: Date,
-                default: Date.now,
+                required: false,
+                default: new Date(),
             },
 
             quantity: {
@@ -66,6 +70,7 @@ const Product = new mongoose.Schema({
             },
 
             size: {
+                _id: false,
                 id: {
                     type: String,
                     required: true,
@@ -78,6 +83,7 @@ const Product = new mongoose.Schema({
             },
 
             color: {
+                _id: false,
                 id: {
                     type: String,
                     required: true,
@@ -95,6 +101,7 @@ const Product = new mongoose.Schema({
             },
 
             metarial: {
+                _id: false,
                 id: {
                     type: String,
                     required: true,
@@ -106,6 +113,7 @@ const Product = new mongoose.Schema({
             },
 
             designs: {
+                _id: false,
                 id: {
                     type: String,
                     required: true,

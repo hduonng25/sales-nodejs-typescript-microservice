@@ -1,65 +1,19 @@
+import { IProductDetail } from '.';
+
 export interface IProduct {
-    id: String;
+    id: string;
 
-    created_date: Date;
+    created_date?: Date;
 
-    created_by: String;
+    created_by?: string;
 
-    is_deleted: Boolean;
+    is_deleted?: boolean;
 
-    price: Number;
+    price: number;
 
-    name: String;
+    name: string;
 
-    note: String;
+    note: string;
 
-    product_details: [
-        {
-            id: String;
-
-            status: Boolean;
-
-            is_deleted: Boolean;
-
-            created_date: Date;
-
-            quantity: Number;
-
-            size: {
-                id: String;
-
-                name: String;
-            };
-
-            color: {
-                id: String;
-
-                name: String;
-
-                code: String;
-            };
-
-            metarial: {
-                id: String;
-
-                name: String;
-            };
-
-            designs: {
-                id: String;
-
-                name: String;
-            };
-
-            image: [
-                {
-                    id: String;
-
-                    name: String;
-
-                    status: Boolean;
-                },
-            ];
-        },
-    ];
+    product_details: IProductDetail[];
 }

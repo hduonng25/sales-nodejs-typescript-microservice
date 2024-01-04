@@ -24,6 +24,18 @@ export async function getByID(params: {
     return success.ok(result);
 }
 
+export async function getColorListID(params: {
+    id_color: string[];
+}): Promise<IColor[]> {
+    const color = await Colors.find({
+        id: {
+            $in: params.id_color,
+        },
+    });
+
+    return color;
+}
+
 export async function createColor(
     params: CreateColorBody,
 ): Promise<Result> {

@@ -6,6 +6,7 @@ import {
     deleteOne,
     getByID,
     getColor,
+    getColorListID,
     updateColor,
 } from '~/controller';
 import {
@@ -27,8 +28,17 @@ router.get(
 router.get(
     '/:id',
     async (req: Request, _: Response, next: NextFunction) => {
-        const id = req.params.id as string;
+        const id: string = req.params.id;
         const result = await getByID({ id });
+        next(result);
+    },
+);
+
+router.post(
+    '/list-id',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const { id_color }: { id_color: string[] } = req.body;
+        const result = await getColorListID({ id_color });
         next(result);
     },
 );

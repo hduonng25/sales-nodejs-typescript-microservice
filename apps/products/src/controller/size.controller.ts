@@ -17,6 +17,18 @@ export async function getByIDSize(params: {
     return success.ok(result);
 }
 
+export async function getListSizeByID(params: {
+    id_size: string[];
+}): Promise<ISize[]> {
+    const size = await Sizes.find({
+        id: {
+            $in: params.id_size,
+        },
+    });
+
+    return size;
+}
+
 export async function createSize(
     params: CretaeSizeBody,
 ): Promise<Result> {
