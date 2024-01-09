@@ -4,6 +4,9 @@ import { IProduct, IProductDetail } from '~/interface/models';
 import {
     createProductBody,
     createProductDetails,
+    setImageProductDetailsBody,
+    updateProductsBody,
+    updateProductsDetails,
 } from '~/interface/request';
 import { checkExitsProduct } from '~/middleware/common';
 import {
@@ -14,6 +17,7 @@ import {
     Sizes,
 } from '~/models';
 
+//TODO: create product details
 export async function createProductDetail(
     params: createProductDetails,
 ): Promise<IProductDetail> {
@@ -47,17 +51,12 @@ export async function createProductDetail(
             id: design?.id,
             name: design?.name,
         },
-
-        images: params.images.map((name: string) => ({
-            id: v1(),
-            name: name,
-            status: false,
-        })),
     };
 
     return details;
 }
 
+//TODO: create product and product details
 export async function createProduct(
     params: createProductBody,
 ): Promise<Result> {
@@ -75,7 +74,6 @@ export async function createProduct(
                 quantity: params.quantity,
                 id_material: params.metarial,
                 id_designs: params.designs,
-                images: params.image,
             });
 
             details.push(detail);
@@ -91,11 +89,115 @@ export async function createProduct(
     };
 
     const product = new Products(new_product);
+
     await product.save();
     return success.ok(product);
 }
 
+//TODO: get list product
 export async function getProduct(): Promise<Result> {
     const result = await Products.find();
     return success.ok(result);
+}
+
+//TODO: get product by id
+export async function getProductByID(params: {
+    id: string;
+}): Promise<Result> {
+    const product = await Products.findOne({ id: params.id });
+    return success.ok(product);
+}
+
+export async function updateProducts(
+    params: updateProductsBody,
+): Promise<Result> {
+    await checkExitsProduct({
+        id: params.id,
+        name: params.name,
+    });
+
+    const update_product: IProduct = {
+        name: params.name,
+        price: params.price,
+    };
+
+    const product = await Products.findOneAndUpdate(
+        { id: params.id },
+        { $set: update_product },
+        { new: true },
+    );
+
+    return success.ok(product);
+}
+
+//TODO: update quantity product details
+export async function updateQuantityProductsDetails(
+    params: updateProductsDetails,
+): Promise<Result> {
+    await Products.updateOne(
+        {
+            id: params.id_product,
+            'product_details.id': params.id_product_details,
+        },
+        { $set: { 'product_details.$.quantity': params.quantity } },
+    );
+
+    const product = await Products.findOne({
+        id: params.id_product,
+    });
+
+    return success.ok(product);
+}
+
+//TODO: set image to product details
+export async function setImageProductDetails(
+    params: setImageProductDetailsBody,
+): Promise<Result> {
+    const images = params.image.map((name: string) => ({
+        id: v1(),
+        name: name,
+        status: false,
+    }));
+
+    await Products.updateOne(
+        {
+            id: params.id_product,
+            'product_details.id': params.id_product_details,
+        },
+        { $set: { 'product_details.$.image': images } },
+    );
+
+    const product = await Products.findOne({
+        id: params.id_product,
+    });
+
+    return success.ok(product);
+}
+
+//TODO: set avatar product details
+export async function setAvatarProductDetails(
+    params: setImageProductDetailsBody,
+): Promise<Result> {
+    const product = await Products.findOne({
+        id: params.id_product,
+    });
+
+    const product_details = product?.product_details?.find(
+        (d) => d.id === params.id_product_details,
+    ) as IProductDetail;
+
+    let avatar = [];
+
+    for (let image of product_details?.image ?? []) {
+        if (image.id === params.id_image) {
+            image.status = true;
+        } else {
+            image.status = false;
+        }
+        avatar.push(image);
+    }
+
+    product_details.image = avatar;
+    await product?.save();
+    return success.ok(product_details);
 }

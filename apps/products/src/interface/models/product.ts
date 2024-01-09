@@ -1,7 +1,7 @@
 import { IProductDetail } from '.';
 
 export interface IProduct {
-    id: string;
+    id?: string;
 
     created_date?: Date;
 
@@ -9,11 +9,11 @@ export interface IProduct {
 
     is_deleted?: boolean;
 
-    price: number;
+    price?: number;
 
-    name: string;
+    name?: string;
 
-    note: string;
+    note?: string;
 
-    product_details: IProductDetail[];
+    product_details?: IProductDetail[];
 }

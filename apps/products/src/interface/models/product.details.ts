@@ -1,8 +1,12 @@
 export interface IProductDetail {
     id: string;
+
     status?: boolean;
+
     is_deleted?: boolean;
+
     created_date?: Date;
+
     quantity?: number;
 
     size: {
@@ -26,7 +30,7 @@ export interface IProductDetail {
         name?: string;
     };
 
-    images?: {
+    image?: {
         id: string;
         name?: string;
         status?: boolean;

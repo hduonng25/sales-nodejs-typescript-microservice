@@ -13,7 +13,7 @@ export type createProductBody = {
 
     designs: string;
 
-    image: string[];
+    images: string[];
 
     quantity: number;
 };
@@ -31,7 +31,35 @@ export type createProductDetails = {
 
     id_designs: string;
 
-    images: string[];
+    image?: string[];
 
     quantity: number;
+};
+
+export type updateProductsBody = {
+    id?: string;
+
+    name?: string;
+
+    price?: number;
+
+    images: string[];
+};
+
+export type updateProductsDetails = {
+    id_product?: string;
+
+    id_product_details: string;
+
+    quantity: number;
+};
+
+export type setImageProductDetailsBody = {
+    id_product: string;
+
+    id_product_details: string;
+
+    image: string[];
+
+    id_image?: string;
 };

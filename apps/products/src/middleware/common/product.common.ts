@@ -8,7 +8,7 @@ export async function checkExitsProduct(params: {
     name?: string;
 }): Promise<void> {
     const match: FilterQuery<IProduct> = {
-        id: {
+        name: {
             $regex: `^${params.name}$`,
             $options: 'i',
         },
@@ -16,6 +16,7 @@ export async function checkExitsProduct(params: {
     };
 
     const product = await Products.findOne(match);
+
     if (product && product.id !== params.id) {
         throw new HttpError({
             status: HttpsStatus.BAD_REQUEST,
