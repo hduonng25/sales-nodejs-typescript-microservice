@@ -1,3 +1,4 @@
+import { boolean } from 'joi';
 import mongoose from 'mongoose';
 import { IProduct } from '~/interface/models';
 
@@ -37,6 +38,12 @@ const Product = new mongoose.Schema({
     note: {
         type: String,
         required: false,
+    },
+
+    is_active: {
+        type: Boolean,
+        required: false,
+        default: true,
     },
 
     product_details: [
@@ -142,6 +149,12 @@ const Product = new mongoose.Schema({
                     },
                 },
             ],
+
+            is_active: {
+                type: Boolean,
+                required: false,
+                default: true,
+            },
         },
     ],
 });

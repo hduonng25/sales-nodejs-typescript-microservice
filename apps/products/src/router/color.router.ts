@@ -4,6 +4,7 @@ import {
     createColor,
     deleteMany,
     deleteOne,
+    findByNameColor,
     getByID,
     getColor,
     getColorListID,
@@ -12,7 +13,11 @@ import {
 import {
     CreateColorBody,
     UpdateColorBody,
-} from '~/interface/request';
+} from '~/interface/request/body';
+import {
+    ColorFindByNameQuery,
+    ColorFindQuery,
+} from '~/interface/request/query';
 import { ColorValidator } from '~/middleware/validator';
 
 export const router: Router = Router();
@@ -20,7 +25,8 @@ export const router: Router = Router();
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getColor();
+        const query = req.query as unknown as ColorFindQuery;
+        const result = await getColor(query);
         next(result);
     },
 );
@@ -30,6 +36,15 @@ router.get(
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string = req.params.id;
         const result = await getByID({ id });
+        next(result);
+    },
+);
+
+router.post(
+    '/findByName',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as ColorFindByNameQuery;
+        const result = await findByNameColor(body);
         next(result);
     },
 );

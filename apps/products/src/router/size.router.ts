@@ -8,14 +8,19 @@ import {
     getSize,
     updateSize,
 } from '~/controller';
-import { CretaeSizeBody, UpdateSizeBody } from '~/interface/request';
+import {
+    CretaeSizeBody,
+    UpdateSizeBody,
+} from '~/interface/request/body';
+import { SizeFindQuery } from '~/interface/request/query';
 
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getSize();
+        const query = req.query as unknown as SizeFindQuery;
+        const result = await getSize(query);
         next(result);
     },
 );

@@ -10,14 +10,16 @@ import {
 import {
     createDesignBody,
     updateDesignBody,
-} from '~/interface/request';
+} from '~/interface/request/body';
+import { DesignsFindQuery } from '~/interface/request/query';
 
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getDesign();
+        const query = req.query as unknown as DesignsFindQuery;
+        const result = await getDesign(query);
         next(result);
     },
 );

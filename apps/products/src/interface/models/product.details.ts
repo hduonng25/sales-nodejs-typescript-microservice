@@ -35,4 +35,6 @@ export interface IProductDetail {
         name?: string;
         status?: boolean;
     }[];
+
+    is_active: boolean;
 }

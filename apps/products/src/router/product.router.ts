@@ -3,24 +3,35 @@ import {
     createProduct,
     getProduct,
     getProductByID,
+    inactiveAndActiveDetails,
+    createNewProductDetails,
     setAvatarProductDetails,
     setImageProductDetails,
     updateProducts,
     updateQuantityProductsDetails,
+    activeProduct,
+    deleteProduct,
+    deleteManyProduct,
 } from '~/controller';
 import {
+    activeProductBody,
+    activeProductDetails,
     createProductBody,
+    newProductDetails,
     setImageProductDetailsBody,
     updateProductsBody,
     updateProductsDetails,
-} from '~/interface/request';
+} from '~/interface/request/body';
+import { FindReqQuery } from '~/interface/request/query';
 
 export const router: Router = Router();
 
+//TODO: product
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getProduct();
+        const query = req.query as unknown as FindReqQuery;
+        const result = await getProduct(query);
         next(result);
     },
 );
@@ -43,6 +54,33 @@ router.post(
     },
 );
 
+router.put(
+    '/active',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as activeProductBody;
+        const result = await activeProduct(body);
+        next(result);
+    },
+);
+
+router.put(
+    '/delete',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id: string = req.body.id;
+        const result = await deleteProduct({ id });
+        next(result);
+    },
+);
+router.put(
+    '/delete-many',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id: string[] = req.body.id;
+        const result = await deleteManyProduct({ id });
+        next(result);
+    },
+);
+
+//TODO: product details
 router.put(
     '/change-quantity-details',
     async (req: Request, _: Response, next: NextFunction) => {
@@ -75,6 +113,24 @@ router.put(
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as setImageProductDetailsBody;
         const result = await setAvatarProductDetails(body);
+        next(result);
+    },
+);
+
+router.post(
+    '/new-details',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as newProductDetails;
+        const result = await createNewProductDetails(body);
+        next(result);
+    },
+);
+
+router.put(
+    '/active-details',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as activeProductDetails;
+        const result = await inactiveAndActiveDetails(body);
         next(result);
     },
 );

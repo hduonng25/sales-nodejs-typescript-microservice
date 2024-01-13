@@ -10,13 +10,15 @@ import {
 import {
     createMaterialBody,
     updateMaterialBody,
-} from '~/interface/request';
+} from '~/interface/request/body';
+import { MetarialFindQuery } from '~/interface/request/query';
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getMetarials();
+        const query = req.query as unknown as MetarialFindQuery;
+        const result = await getMetarials(query);
         next(result);
     },
 );

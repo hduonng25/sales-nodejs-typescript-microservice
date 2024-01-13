@@ -1,14 +1,23 @@
-import { Result, success } from 'app';
+import { HttpError, Result, error, success } from 'app';
+import { FilterQuery, PipelineStage } from 'mongoose';
+import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
 import { IProduct, IProductDetail } from '~/interface/models';
 import {
+    activeProductBody,
+    activeProductDetails,
     createProductBody,
     createProductDetails,
+    newProductDetails,
     setImageProductDetailsBody,
     updateProductsBody,
     updateProductsDetails,
-} from '~/interface/request';
-import { checkExitsProduct } from '~/middleware/common';
+} from '~/interface/request/body';
+import { FindReqQuery } from '~/interface/request/query';
+import {
+    checkExitProductDetails,
+    checkExitsProduct,
+} from '~/middleware/common';
 import {
     Colors,
     Designs,
@@ -51,6 +60,8 @@ export async function createProductDetail(
             id: design?.id,
             name: design?.name,
         },
+
+        is_active: true,
     };
 
     return details;
@@ -95,9 +106,97 @@ export async function createProduct(
 }
 
 //TODO: get list product
-export async function getProduct(): Promise<Result> {
-    const result = await Products.find();
-    return success.ok(result);
+export async function getProduct(
+    params: FindReqQuery,
+): Promise<Result> {
+    //khoi tao bien filter va sort de su dung trong truy van
+    let filter: FilterQuery<IProduct> = {};
+    let sort: Record<string, 1 | -1> = { created_date: -1 };
+
+    try {
+        //Neu co tham so truy van (query), chuyen doi no thanh dieu kien sap xep MongoDB
+        //Sau do gan no vao bien sort
+        if (params.query) {
+            const uFilter = parseQuery(params.query);
+            filter = { $and: [filter, uFilter] };
+        }
+        params.sort && (sort = parseSort(params.sort));
+    } catch (e) {
+        //Neu co loi trong qua trinh chuyen doi quer hoac sort, xu ly loi va tra ra HttpError
+        const err = e as unknown as ParseSyntaxError;
+        const errorValue =
+            err.message === params.sort ? params.sort : params.query;
+        throw new HttpError(
+            error.invalidData({
+                location: 'query',
+                param: err.type,
+                message: err.message,
+                value: errorValue,
+            }),
+        );
+    }
+
+    //Dinh nghia cac truong can tra ve trong ket qua
+    const project = {
+        _id: 0,
+        id: 1,
+        price: 1,
+        name: 1,
+        number: 1,
+        is_active: 1,
+        created_date: 1,
+    };
+
+    //Kiem tra va dieu chinh du lieu cua params.page de dam bao du lieu khong am
+    params.page = params.page <= 0 ? 1 : params.page;
+
+    //Khoi tao facetData de su dung trong truy van MongoDB
+    const facetData =
+        params.size == -1
+            ? []
+            : [
+                  { $skip: (params.page - 1) * params.size },
+                  { $limit: params.size * 1 },
+              ];
+
+    const facet = {
+        meta: [{ $count: 'total' }],
+        data: facetData,
+    };
+
+    Object.assign(filter, { is_deleted: false });
+
+    //Dinh nghia cac giai doan cua pipeline truy van MongoDB
+    const pipelane: PipelineStage[] = [
+        { $match: filter }, //Giai doan 1: Tim kiem theo dieu kien cua filter
+        { $project: project }, //Giai doan 2: Chon loc cac truong can tra ve
+        { $sort: sort }, //Giai doan 3: Sap xep du lieu
+        { $facet: facet }, //Giai doan 4: Facet thuc hien phan trang
+    ];
+
+    //Thuc hien truy van bang aggregate va su ly ket qua
+    const products = await Products.aggregate(pipelane)
+        .collation({ locale: 'vi' }) //Lay du lieu theo tieng Viet
+        .then((res) => res[0]) //Lay du lieu tu giai doan dau tien
+        .then(async (res) => {
+            //Xu ly ket qua va them thong tin san pham vao moi muc trong du lieu
+            const total = !(res.meta.length > 0)
+                ? 0
+                : res.meta[0].total;
+
+            let totaPage = Math.ceil(total / params.size);
+            totaPage = totaPage > 0 ? totaPage : 1;
+
+            //Tra ve ket qua cuoi cung
+            return {
+                page: Number(params.page),
+                total: total,
+                total_page: totaPage,
+                data: res.data,
+            };
+        });
+
+    return success.ok(products);
 }
 
 //TODO: get product by id
@@ -128,6 +227,53 @@ export async function updateProducts(
     );
 
     return success.ok(product);
+}
+
+export async function activeProduct(
+    params: activeProductBody,
+): Promise<Result> {
+    const product = await Products.findOneAndUpdate(
+        { id: params.id, is_deleted: false },
+        { $set: { is_active: params.is_active } },
+        { new: true },
+    );
+
+    return success.ok({
+        mess: !params.is_active
+            ? `inactive product ${product?.name} successfuly`
+            : `active product ${product?.name} successfuly`,
+        data: product,
+    });
+}
+
+export async function deleteProduct(params: {
+    id: string;
+}): Promise<Result> {
+    const product = await Products.findOneAndUpdate(
+        { id: params.id },
+        { $set: { is_deleted: true } },
+        { new: true },
+    );
+
+    return success.ok({
+        mess: `delete product ${product?.name} successfuly`,
+        data: product,
+    });
+}
+
+export async function deleteManyProduct(params: {
+    id: string[];
+}): Promise<Result> {
+    await Promise.all(
+        params.id.map(async (id: string) => {
+            await Products.findOneAndUpdate(
+                { id: id },
+                { $set: { is_deleted: true } },
+            );
+        }),
+    );
+
+    return success.ok({ mess: 'delete many product successfuly' });
 }
 
 //TODO: update quantity product details
@@ -200,4 +346,87 @@ export async function setAvatarProductDetails(
     product_details.image = avatar;
     await product?.save();
     return success.ok(product_details);
+}
+
+export async function createNewProductDetails(
+    params: newProductDetails,
+): Promise<Result> {
+    await checkExitProductDetails({
+        id_color: params.id_color,
+        id_size: params.id_size,
+        id_product: params.id_product,
+        id_productDetails: params.id_product_details,
+    });
+
+    const size = await Sizes.findOne({ id: params.id_size });
+    const color = await Colors.findOne({ id: params.id_color });
+
+    if (!size || !color) {
+        return error.notFound({
+            location: !size ? 'size' : 'color',
+            param: 'body',
+            message: !size
+                ? 'size is not found'
+                : 'color is not found',
+        });
+    }
+
+    const product_details = await Products.aggregate([
+        { $unwind: '$product_details' },
+        { $match: { id: params.id_product } },
+        {
+            $project: {
+                _id: 0,
+                product_details: 1,
+            },
+        },
+        { $limit: 1 },
+    ]);
+
+    const [
+        {
+            product_details: { metarial, designs, quantity },
+        },
+    ] = product_details;
+
+    const detail = await createProductDetail({
+        id_color: params.id_color,
+        id_size: params.id_size,
+        quantity: quantity,
+        id_material: metarial.id,
+        id_designs: designs.id,
+    });
+
+    await Products.updateOne(
+        { id: params.id_product },
+        {
+            $push: {
+                product_details: detail,
+            },
+        },
+    );
+
+    return success.ok({ mess: 'create successfuly' });
+}
+
+export async function inactiveAndActiveDetails(
+    params: activeProductDetails,
+): Promise<Result> {
+    const product = await Products.findOne({
+        id: params.id_product,
+        is_deleted: false,
+    });
+
+    const product_detail = product?.product_details?.find(
+        (d: IProductDetail) => d.id === params.id_product_details,
+    ) as IProductDetail;
+
+    product_detail.is_active = params.is_active;
+    await product?.save();
+
+    return success.ok({
+        mes: !params.is_active
+            ? 'inactive product details successfuly'
+            : 'active product details successfuly',
+    });
 }

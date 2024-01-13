@@ -16,4 +16,6 @@ export interface IProduct {
     note?: string;
 
     product_details?: IProductDetail[];
+
+    is_active?: boolean;
 }

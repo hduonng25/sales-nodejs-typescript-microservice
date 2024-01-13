@@ -1,31 +1,31 @@
 {
-  "name": "ts_sales",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "build": "npx pnpm -r build",
-    "clean": "npx pnpm -r clean",
-    "lint": "npx pnpm -r lint",
-    "format": "npx pnpm -r format",
-    "start": "npx pnpm -r start"
-  },
-  "keywords": [],
-  "author": "ts_sales",
-  "license": "ISC",
-  "dependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-scope": "^7.1.1",
-    "eslint-utils": "^3.0.0",
-    "eslint-visitor-keys": "^3.3.0",
-    "prettier": "^2.8.1",
-    "prettier-linter-helpers": "^1.0.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/uuid": "^9.0.7",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0"
-  }
+    "name": "ts_sales",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "build": "npx pnpm -r build",
+        "clean": "npx pnpm -r clean",
+        "lint": "npx pnpm -r lint",
+        "format": "npx pnpm -r format",
+        "start": "npx pnpm -r start"
+    },
+    "keywords": [],
+    "author": "ts_sales",
+    "license": "ISC",
+    "dependencies": {
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-scope": "^7.1.1",
+        "eslint-utils": "^3.0.0",
+        "eslint-visitor-keys": "^3.3.0",
+        "prettier": "^2.8.1",
+        "prettier-linter-helpers": "^1.0.0"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/uuid": "^9.0.7",
+        "ts-node": "^10.9.1",
+        "tsconfig-paths": "^4.2.0"
+    }
 }
