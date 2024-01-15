@@ -3,24 +3,24 @@ import {
     createSize,
     deleteManySize,
     deleteSize,
+    findSizes,
     getByIDSize,
     getListSizeByID,
-    getSize,
     updateSize,
 } from '~/controller';
 import {
     CretaeSizeBody,
+    FindReqQuery,
     UpdateSizeBody,
-} from '~/interface/request/body';
-import { SizeFindQuery } from '~/interface/request/query';
+} from '~/interface/request';
 
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const query = req.query as unknown as SizeFindQuery;
-        const result = await getSize(query);
+        const query = req.query as unknown as FindReqQuery;
+        const result = await findSizes(query);
         next(result);
     },
 );

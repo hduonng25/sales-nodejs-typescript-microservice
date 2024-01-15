@@ -2,20 +2,17 @@ import { HttpError, Result, error, success } from 'app';
 import { IColor } from '~/interface/models';
 import {
     CreateColorBody,
+    FindReqQuery,
     UpdateColorBody,
-} from '~/interface/request/body';
+} from '~/interface/request';
 import { Colors } from '~/models';
 import { v1 } from 'uuid';
 import { CheckExitsColor } from '~/middleware/common';
-import {
-    ColorFindByNameQuery,
-    ColorFindQuery,
-} from '~/interface/request/query';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 
-export async function getColor(
-    params: ColorFindQuery,
+export async function findColors(
+    params: FindReqQuery,
 ): Promise<Result> {
     let filter: FilterQuery<IColor> = {};
     let sort: Record<string, 1 | -1> = { created_date: -1 };
@@ -99,89 +96,6 @@ export async function getByID(params: {
         id: params.id,
         is_deleted: false,
     });
-
-    return success.ok(result);
-}
-
-export async function findByNameColor(
-    params: ColorFindByNameQuery,
-): Promise<Result> {
-    let filter: FilterQuery<IColor> = {
-        name: {
-            $regex: `^${params.name}`,
-            $options: 'i',
-        },
-
-        is_deleted: false,
-    };
-
-    let sort: Record<string, 1 | -1> = { created_date: -1 };
-
-    try {
-        if (params.query) {
-            const uFilter = parseQuery(params.query);
-            filter = { $and: [filter, uFilter] };
-        }
-        params.sort && (sort = parseSort(params.sort));
-    } catch (e) {
-        const err = e as unknown as ParseSyntaxError;
-        const errorValue =
-            err.message === params.sort ? params.sort : params.query;
-        throw new HttpError(
-            error.invalidData({
-                location: 'query',
-                param: err.type,
-                message: err.message,
-                value: errorValue,
-            }),
-        );
-    }
-
-    const project = {
-        _id: 0,
-        id: 1,
-        name: 1,
-    };
-    params.page = params.page <= 0 ? 1 : params.page;
-    const facetData =
-        params.size == -1
-            ? []
-            : [
-                  { $skip: (params.page - 1) * params.size },
-                  { $limit: params.size * 1 },
-              ];
-
-    const facet = {
-        meta: [{ $count: 'total' }],
-        data: facetData,
-    };
-
-    Object.assign(filter, { is_deleted: false });
-
-    const pipelane: PipelineStage[] = [
-        { $match: filter },
-        { $project: project },
-        { $sort: sort },
-        { $facet: facet },
-    ];
-
-    const result = await Colors.aggregate(pipelane)
-        .collation({ locale: 'vi' })
-        .then((res) => res[0])
-        .then(async (res) => {
-            const total = !(res.meta.length > 0)
-                ? 0
-                : res.meta[0].total;
-            let totalPage = Math.ceil(total / params.size);
-            totalPage = totalPage > 0 ? totalPage : 1;
-
-            return {
-                page: Number(params.page),
-                total: total,
-                total_page: totalPage,
-                data: res.data,
-            };
-        });
 
     return success.ok(result);
 }

@@ -1,18 +1,95 @@
 import { v1 } from 'uuid';
 import {
+    FindReqQuery,
     changePasswordBody,
     createUserBody,
     updateUserBody,
 } from '~/interface/request';
 import Users from '~/model/user.model';
 import bcrypt from 'bcrypt';
-import { Result, error, success } from 'app';
+import { HttpError, Result, error, success } from 'app';
 import { sendMailcreateUser } from '~/service';
 import { checkExitsAccount } from '~/middleware/common';
 import { IUser } from '~/interface/model';
+import { FilterQuery, PipelineStage } from 'mongoose';
+import { ParseSyntaxError, parseQuery } from 'mquery';
 
-export async function getUser(): Promise<Result> {
-    const list = await Users.find({});
+export async function getUser(
+    params: FindReqQuery,
+): Promise<Result> {
+    let filter: FilterQuery<IUser> = {
+        is_deleted: false,
+    };
+    let sort: Record<string, 1 | -1> = { create_date: -1 };
+
+    try {
+        if (params.query) {
+            const uFilter = parseQuery(params.query);
+            filter = { $and: [filter, uFilter] };
+        }
+    } catch (e) {
+        const err = e as unknown as ParseSyntaxError;
+        const errorValue =
+            err.message === params.sort ? params.sort : params.query;
+        throw new HttpError(
+            error.invalidData({
+                location: 'query',
+                param: err.type,
+                message: err.message,
+                value: errorValue,
+            }),
+        );
+    }
+
+    const project = {
+        _id: 0,
+        id: 1,
+        name: 1,
+        email: 1,
+        role: 1,
+    };
+
+    params.page = params.page <= 0 ? 1 : params.page;
+
+    const facetData =
+        params.size == 1
+            ? []
+            : [
+                  { $skip: (params.page - 1) * params.size },
+                  { $limit: params.size * 1 },
+              ];
+
+    const facet = {
+        meta: [{ $count: 'total' }],
+        data: facetData,
+    };
+
+    Object.assign(filter, { is_deleted: false });
+
+    const pipelane: PipelineStage[] = [
+        { $match: filter },
+        { $project: project },
+        { $sort: sort },
+        { $facet: facet },
+    ];
+
+    const list = await Users.aggregate(pipelane)
+        .collation({ locale: 'vi' })
+        .then((res) => res[0])
+        .then(async (res) => {
+            const total = !(res.meta.length > 0)
+                ? 0
+                : res.meta[0].total;
+            let totalPage = Math.ceil(total / params.size);
+            totalPage = totalPage > 0 ? totalPage : 1;
+
+            return {
+                page: Number(params.page),
+                total: total,
+                total_page: totalPage,
+                data: res.data,
+            };
+        });
     return success.ok(list);
 }
 

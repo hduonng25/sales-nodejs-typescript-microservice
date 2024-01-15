@@ -4,15 +4,15 @@ import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
 import { IDesign } from '~/interface/models';
 import {
+    FindReqQuery,
     createDesignBody,
     updateDesignBody,
-} from '~/interface/request/body';
-import { DesignsFindQuery } from '~/interface/request/query';
+} from '~/interface/request';
 import { checkExitsDesign } from '~/middleware/common';
 import { Designs } from '~/models';
 
-export async function getDesign(
-    params: DesignsFindQuery,
+export async function findDesigns(
+    params: FindReqQuery,
 ): Promise<Result> {
     let filter: FilterQuery<IDesign> = {};
     let sort: Record<string, 1 | -1> = { created_date: -1 };

@@ -10,6 +10,7 @@ import {
     updateUser,
 } from '~/controller';
 import {
+    FindReqQuery,
     changePasswordBody,
     createUserBody,
     updateUserBody,
@@ -21,7 +22,8 @@ export const router: Router = Router();
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const result = await getUser();
+        const query = req.query as unknown as FindReqQuery;
+        const result = await getUser(query);
         next(result);
     },
 );

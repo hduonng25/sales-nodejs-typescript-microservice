@@ -4,6 +4,7 @@ import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
 import { IProduct, IProductDetail } from '~/interface/models';
 import {
+    FindReqQuery,
     activeProductBody,
     activeProductDetails,
     createProductBody,
@@ -12,8 +13,7 @@ import {
     setImageProductDetailsBody,
     updateProductsBody,
     updateProductsDetails,
-} from '~/interface/request/body';
-import { FindReqQuery } from '~/interface/request/query';
+} from '~/interface/request';
 import {
     checkExitProductDetails,
     checkExitsProduct,
@@ -106,7 +106,7 @@ export async function createProduct(
 }
 
 //TODO: get list product
-export async function getProduct(
+export async function findProducts(
     params: FindReqQuery,
 ): Promise<Result> {
     //khoi tao bien filter va sort de su dung trong truy van
@@ -142,7 +142,6 @@ export async function getProduct(
         id: 1,
         price: 1,
         name: 1,
-        number: 1,
         is_active: 1,
         created_date: 1,
     };

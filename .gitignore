@@ -3,6 +3,7 @@
 **/build
 
 **/.env
+**/.idea
 
 **/tsconfig.tsbuildinfo
 # **/package.json

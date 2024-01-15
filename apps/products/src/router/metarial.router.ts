@@ -3,22 +3,22 @@ import {
     createMetarials,
     deleteManyMetarials,
     deleteMetarial,
-    getMetarials,
+    findMetarials,
     getMetarialsByID,
     updateMetarial,
 } from '~/controller';
 import {
+    FindReqQuery,
     createMaterialBody,
     updateMaterialBody,
-} from '~/interface/request/body';
-import { MetarialFindQuery } from '~/interface/request/query';
+} from '~/interface/request';
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const query = req.query as unknown as MetarialFindQuery;
-        const result = await getMetarials(query);
+        const query = req.query as unknown as FindReqQuery;
+        const result = await findMetarials(query);
         next(result);
     },
 );

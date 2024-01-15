@@ -5,14 +5,14 @@ import { v1 } from 'uuid';
 import { ISize } from '~/interface/models';
 import {
     CretaeSizeBody,
+    FindReqQuery,
     UpdateSizeBody,
-} from '~/interface/request/body';
-import { SizeFindQuery } from '~/interface/request/query';
+} from '~/interface/request';
 import { CheckExitsSize } from '~/middleware/common';
 import { Sizes } from '~/models';
 
-export async function getSize(
-    params: SizeFindQuery,
+export async function findSizes(
+    params: FindReqQuery,
 ): Promise<Result> {
     let filter: FilterQuery<ISize> = {};
     let sort: Record<string, 1 | -1> = { created_date: -1 };

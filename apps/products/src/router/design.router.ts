@@ -3,23 +3,23 @@ import {
     createDesign,
     deleteDesign,
     deleteManyDesign,
-    getDesign,
+    findDesigns,
     getDesignByID,
     updateDesign,
 } from '~/controller';
 import {
+    FindReqQuery,
     createDesignBody,
     updateDesignBody,
-} from '~/interface/request/body';
-import { DesignsFindQuery } from '~/interface/request/query';
+} from '~/interface/request';
 
 export const router: Router = Router();
 
 router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
-        const query = req.query as unknown as DesignsFindQuery;
-        const result = await getDesign(query);
+        const query = req.query as unknown as FindReqQuery;
+        const result = await findDesigns(query);
         next(result);
     },
 );

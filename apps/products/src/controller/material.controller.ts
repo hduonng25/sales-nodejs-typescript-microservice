@@ -4,15 +4,15 @@ import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
 import { IMetarial } from '~/interface/models';
 import {
+    FindReqQuery,
     createMaterialBody,
     updateMaterialBody,
-} from '~/interface/request/body';
-import { MetarialFindQuery } from '~/interface/request/query';
+} from '~/interface/request';
 import { checkExitsMaterial } from '~/middleware/common';
 import { Metarials } from '~/models';
 
-export async function getMetarials(
-    params: MetarialFindQuery,
+export async function findMetarials(
+    params: FindReqQuery,
 ): Promise<Result> {
     let filter: FilterQuery<IMetarial> = {};
     let sort: Record<string, 1 | -1> = { created_date: -1 };

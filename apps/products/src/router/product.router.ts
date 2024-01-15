@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     createProduct,
-    getProduct,
     getProductByID,
     inactiveAndActiveDetails,
     createNewProductDetails,
@@ -12,8 +11,10 @@ import {
     activeProduct,
     deleteProduct,
     deleteManyProduct,
+    findProducts,
 } from '~/controller';
 import {
+    FindReqQuery,
     activeProductBody,
     activeProductDetails,
     createProductBody,
@@ -21,8 +22,7 @@ import {
     setImageProductDetailsBody,
     updateProductsBody,
     updateProductsDetails,
-} from '~/interface/request/body';
-import { FindReqQuery } from '~/interface/request/query';
+} from '~/interface/request';
 
 export const router: Router = Router();
 
@@ -31,7 +31,7 @@ router.get(
     '/',
     async (req: Request, _: Response, next: NextFunction) => {
         const query = req.query as unknown as FindReqQuery;
-        const result = await getProduct(query);
+        const result = await findProducts(query);
         next(result);
     },
 );

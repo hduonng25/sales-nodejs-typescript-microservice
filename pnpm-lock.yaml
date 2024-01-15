@@ -99,6 +99,9 @@ importers:
       mongoose:
         specifier: ^8.0.1
         version: 8.0.3
+      mquery:
+        specifier: workspace:*
+        version: link:../../packages/mquery
       prettier-config-custom:
         specifier: workspace:*
         version: link:../../packages/prettier
