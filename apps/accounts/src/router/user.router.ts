@@ -1,4 +1,4 @@
-import { validate } from 'app';
+import { validate, verifyRole } from 'app';
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     changePassword,

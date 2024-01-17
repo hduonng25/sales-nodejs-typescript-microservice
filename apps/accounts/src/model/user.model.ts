@@ -37,9 +37,20 @@ const User = new mongoose.Schema({
         required: false,
     },
 
-    role: {
+    roles: {
         type: String,
         require: false,
+    },
+
+    failed_login: {
+        type: Number,
+        required: false,
+        default: 0,
+    },
+
+    last_locked: {
+        type: Date,
+        required: false,
     },
 
     is_deleted: {

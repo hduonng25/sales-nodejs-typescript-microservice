@@ -46,7 +46,7 @@ export async function getUser(
         id: 1,
         name: 1,
         email: 1,
-        role: 1,
+        roles: 1,
     };
 
     params.page = params.page <= 0 ? 1 : params.page;
@@ -119,7 +119,7 @@ export async function createUser(
         email: params.email,
         password: password,
         type: params.type,
-        role: params.role,
+        roles: params.role,
         is_deleted: false,
     };
 

@@ -1,3 +1,4 @@
+import { verifyRole, verifyToken } from 'app';
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     createMetarials,
@@ -34,6 +35,7 @@ router.get(
 
 router.post(
     '/',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as createMaterialBody;
         const result = await createMetarials(body);
@@ -43,6 +45,7 @@ router.post(
 
 router.put(
     '/',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as updateMaterialBody;
         const result = await updateMetarial(body);
@@ -52,6 +55,7 @@ router.put(
 
 router.put(
     '/delete',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const { id } = req.body;
         const result = await deleteMetarial({ id });
@@ -61,6 +65,7 @@ router.put(
 
 router.put(
     '/delete-many',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string[] = req.body.id;
         const result = await deleteManyMetarials({ id });

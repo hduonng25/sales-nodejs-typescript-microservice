@@ -1,3 +1,4 @@
+import { validate, verifyRole, verifyToken } from 'app';
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     createSize,
@@ -13,6 +14,7 @@ import {
     FindReqQuery,
     UpdateSizeBody,
 } from '~/interface/request';
+import { createSizeSchema } from '~/middleware/validator';
 
 export const router: Router = Router();
 
@@ -36,6 +38,7 @@ router.get(
 
 router.post(
     '/list-id',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const { id_size }: { id_size: string[] } = req.body;
         const result = await getListSizeByID({ id_size });
@@ -45,6 +48,8 @@ router.post(
 
 router.post(
     '/',
+    verifyRole('ADMIN'),
+    validate.body(createSizeSchema),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as CretaeSizeBody;
         const result = await createSize(body);
@@ -54,6 +59,7 @@ router.post(
 
 router.put(
     '/',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as UpdateSizeBody;
         const result = await updateSize(body);
@@ -63,6 +69,7 @@ router.put(
 
 router.put(
     '/delete',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string = req.body.id;
         const result = await deleteSize({ id });
@@ -72,6 +79,7 @@ router.put(
 
 router.put(
     '/delete-many',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string[] = req.body.id;
         const result = await deleteManySize({ id });

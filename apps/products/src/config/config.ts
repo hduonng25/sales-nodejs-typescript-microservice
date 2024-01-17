@@ -48,6 +48,6 @@ export const config = {
     },
 
     keys: {
-        public_key: process.env.PUBLIC_KEY || '',
+        public: process.env.PUBLIC_KEY || '',
     },
 };

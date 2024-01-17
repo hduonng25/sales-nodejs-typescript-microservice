@@ -1,18 +1,23 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { login } from '~/controller';
+import { login, newToken } from '~/controller';
 import { loginBody } from '~/interface/request';
 
 export const router: Router = Router();
 
 router.post(
     '/',
-    async (
-        request: Request,
-        response: Response,
-        next: NextFunction,
-    ) => {
-        const body = request.body as loginBody;
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as loginBody;
         const result = await login({ ...body });
+        next(result);
+    },
+);
+
+router.post(
+    '/refresh-token',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const token = req.header('refresh-token') as string;
+        const result = await newToken(token);
         next(result);
     },
 );

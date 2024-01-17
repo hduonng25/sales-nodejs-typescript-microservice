@@ -1,4 +1,4 @@
-import { validate } from 'app';
+import { validate, verifyRole } from 'app';
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     createColor,
@@ -14,7 +14,7 @@ import {
     FindReqQuery,
     UpdateColorBody,
 } from '~/interface/request';
-import { ColorValidator } from '~/middleware/validator';
+import { createColorSchema } from '~/middleware/validator';
 
 export const router: Router = Router();
 
@@ -38,6 +38,7 @@ router.get(
 
 router.post(
     '/list-id',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const { id_color }: { id_color: string[] } = req.body;
         const result = await getColorListID({ id_color });
@@ -47,17 +48,19 @@ router.post(
 
 router.post(
     '/',
-    validate.body(ColorValidator),
+    verifyRole('ADMIN'),
+    validate.body(createColorSchema),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as CreateColorBody;
-        const result = await createColor(body);
+        const result = await createColor({ ...body });
         next(result);
     },
 );
 
 router.put(
     '/',
-    validate.body(ColorValidator),
+    verifyRole('ADMIN'),
+    validate.body(createColorSchema),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as UpdateColorBody;
         const result = await updateColor(body);
@@ -67,6 +70,7 @@ router.put(
 
 router.put(
     '/delete',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string = req.body.id;
         const result = await deleteOne({ id });
@@ -76,6 +80,7 @@ router.put(
 
 router.put(
     '/delete-many',
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const id: string[] = req.body.id;
         const result = await deleteMany({ id });

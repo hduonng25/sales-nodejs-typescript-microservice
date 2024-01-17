@@ -4,7 +4,8 @@ import jsonwebtoken, {
 } from 'jsonwebtoken';
 import { config } from '../config/config';
 import { NextFunction, Request, Response } from 'express';
-import { error } from 'app';
+import sha256 from 'crypto-js/sha256';
+import { Payload, error } from 'app';
 
 export function checkToken(
     request: Request,
@@ -52,17 +53,16 @@ export function checkToken(
     return next();
 }
 
-export function genToken(payload: any): {
-    token: String;
-    expireAt: Number;
+export function genAccessToken(payload: Omit<Payload, 'type'>): {
+    token: string;
+    expireAt: number;
 } {
-    const timeStaps = new Date().getTime() / 1000;
-    const expireAt = Math.floor(timeStaps + 60 * 60);
+    const timestampInSec = new Date().getTime() / 1000;
+    const expireAt = Math.floor(timestampInSec + 60 * 60);
     const signOptions = {
         expiresIn: '1h',
         algorithm: 'RS256',
     } as SignOptions;
-
     const token = jsonwebtoken.sign(
         { ...payload, type: 'ACCESS_TOKEN' },
         config.keys.private_key,
@@ -71,21 +71,43 @@ export function genToken(payload: any): {
     return { token, expireAt };
 }
 
-export function refreshToken(payload: any): {
-    token: String;
-    expireAt: Number;
+export function genRefreshToken(id: string): {
+    token: string;
+    expireAt: number;
 } {
-    const timeStaps = new Date().getTime() / 1000;
-    const expireAt = Math.floor(timeStaps + 60 * 60);
+    const timestampInSec = new Date().getTime() / 1000;
+    const expireAt = Math.floor(timestampInSec + 60 * 60);
     const signOptions = {
-        expiresIn: '1h',
+        expiresIn: '24h',
         algorithm: 'RS256',
     } as SignOptions;
-
     const token = jsonwebtoken.sign(
-        { ...payload, type: 'ACCESS_TOKEN' },
+        { id, type: 'REFRESH_TOKEN' },
         config.keys.private_key,
         signOptions,
     );
     return { token, expireAt };
+}
+
+export function getPayload(token: string): Payload | Error {
+    const verifyOptions = {
+        algorithm: 'RS256',
+    } as VerifyOptions;
+    try {
+        const publicKey = config.keys.public_key;
+        const payload = <Payload>(
+            jsonwebtoken.verify(token, publicKey, verifyOptions)
+        );
+        return payload;
+    } catch (error) {
+        return error as Error;
+    }
+}
+
+export function genResetPasswordToken(
+    id: string,
+    time: Date,
+    password?: string,
+): string {
+    return sha256(password || '' + id + time).toString();
 }

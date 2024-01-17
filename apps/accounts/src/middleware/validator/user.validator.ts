@@ -1,6 +1,6 @@
 import joi from 'joi';
 
-const userRole = ['Admin', 'Staff'];
+const userRole = ['ADMIN', 'STAFF'];
 
 export const createUserSchema = joi
     .object({

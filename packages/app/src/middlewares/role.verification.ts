@@ -9,12 +9,11 @@ import { HttpsStatus } from '../constant';
 import { HttpError } from '../error';
 import { Payload } from '../request';
 import { ErrorDetail, error } from '../result';
-import { redis } from '../database';
 
 //TODO: middleware xac thuc va kiem tra quyen trong express
 export function verifyRole(...roles: string[]): RequestHandler {
     if (roles.includes('*')) {
-        roles.push('EU', 'ADMIN', 'SHIP');
+        roles.push('ADMIN', 'STAFF');
     }
 
     return (req: Request, _: Response, next: NextFunction) => {
@@ -70,18 +69,15 @@ export async function verifyToken(
             jsonwebtoken.verify(token, publicKey, option)
         );
         req.payload = payload;
-        const expireAt = await getExpireTime({
-            token,
-            userId: payload.id,
-        });
-        if (payload.type !== 'ACCESS_TOKEN' || expireAt === null) {
+        console.log(payload + 'patload ==>');
+
+        if (payload.type !== 'ACCESS_TOKEN') {
             return next({
                 status: HttpsStatus.UNAUTHORIZED,
                 code: 'INVALID_TOKEN',
                 errors: errors,
             });
         }
-
         return next();
     } catch (error) {
         const e: Error = error as Error;
@@ -99,16 +95,4 @@ export async function verifyToken(
             });
         }
     }
-}
-
-async function getExpireTime(params: {
-    token: string;
-    userId: string;
-}): Promise<string | null> {
-    if (redis.status !== 'ready') {
-        await redis.connect();
-    }
-    const tokenSignature = params.token.split('.')[2];
-    const key = `ship:token:user:${params.userId}`;
-    return await redis.zscore(key, tokenSignature);
 }

@@ -1,8 +1,9 @@
 export interface Payload {
     id: string;
     roles: string[];
-    phone: string;
+    name: string;
     type: string;
+    email: string;
 }
 
 declare module 'express-serve-static-core' {
