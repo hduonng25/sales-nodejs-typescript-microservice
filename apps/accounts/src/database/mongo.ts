@@ -1,3 +1,4 @@
+import logger from 'logger';
 import mongoose, { ConnectOptions } from 'mongoose';
 import { config } from '~/config';
 
@@ -7,11 +8,11 @@ export function connectMongo(onSuccess: () => void): void {
     mongoose
         .connect(connectionUri, {} as ConnectOptions)
         .then(() => {
-            console.log('Connected to mongo successfuly');
+            logger.info('Connected to mongo successfuly');
             onSuccess();
         })
         .catch((err) => {
-            console.error('%O', err);
+            logger.error('%O', err);
         });
 }
 
