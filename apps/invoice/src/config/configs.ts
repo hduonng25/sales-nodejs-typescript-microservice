@@ -50,4 +50,15 @@ export const configs = {
     keys: {
         public: process.env.PUBLIC_KEY || '',
     },
+
+    services: {
+        product: {
+            product_prefix: process.env.PRODUCT_PREFIX || '',
+            product_host: process.env.PRODUCT_HOST || '',
+            product_port: process.env.PRODUCT_PORT || '3002',
+            api: function (): string {
+                return `${this.product_host}:${this.product_port}${this.product_prefix}`;
+            },
+        }
+    }
 };

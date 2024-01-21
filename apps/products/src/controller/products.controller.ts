@@ -429,3 +429,94 @@ export async function inactiveAndActiveDetails(
             : 'active product details successfuly',
     });
 }
+
+//TODO: Sales
+export async function getDetails(params: {
+    id: string;
+}): Promise<Result> {
+    const filter: FilterQuery<IProduct> = {
+        id: params.id,
+        is_deleted: false,
+        is_active: true,
+    };
+
+    const pipeline: PipelineStage[] = [{ $match: filter }];
+
+    const product = await Products.aggregate(pipeline)
+        .collation({ locale: 'vi' })
+        .then(([result]) => {
+            //([result]) Ky thuat destructuring assignment trong js va ts de lay ra phan tu dau tien cua mang
+            const { name, note, image, price, product_details } =
+                result;
+
+            const uniqueColors = Array.from(
+                new Set(
+                    product_details.map(
+                        (item: IProductDetail) =>
+                            item.color.code as string,
+                    ),
+                ),
+            );
+            const uniqueSizes = Array.from(
+                new Set(
+                    product_details.map(
+                        (item: IProductDetail) =>
+                            item.size.name as string,
+                    ),
+                ),
+            );
+
+            return {
+                name,
+                note,
+                image,
+                price,
+                color: uniqueColors,
+                size: uniqueSizes,
+            };
+        });
+
+    return success.ok(product);
+}
+
+export async function getDetailsByColorAndSize(params: {
+    id: string;
+    color: string;
+    size: string;
+}): Promise<Result> {
+    let filter: FilterQuery<IProduct> = {
+        id: params.id,
+        product_details: {
+            $elemMatch: {
+                'color.name': params.color,
+                'size.name': params.size,
+            },
+        },
+        is_active: true,
+        is_deleted: false,
+    };
+
+    const product = await Products.aggregate([{ $match: filter }])
+        .collation({ locale: 'vi' })
+        .then(async ([result]) => {
+            const details = result.product_details.find(
+                (item: IProductDetail) =>
+                    item.color.name === params.color &&
+                    item.size.name === params.size,
+            );
+
+            let image = details.image.filter(
+                (img: any) => img.status == true,
+            );
+
+            return {
+                id: details.id,
+                name: result.name,
+                price: result.price,
+                image: image[0].name,
+                color: details.color.name,
+                size: details.size.name,
+            };
+        });
+    return success.ok(product);
+}

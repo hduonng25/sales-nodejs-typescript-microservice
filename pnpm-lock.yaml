@@ -199,6 +199,9 @@ importers:
       app:
         specifier: workspace:*
         version: link:../../packages/app
+      axios:
+        specifier: ^1.6.2
+        version: 1.6.2
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1

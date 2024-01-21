@@ -1,4 +1,4 @@
-import { boolean } from 'joi';
+import { boolean, string } from 'joi';
 import mongoose from 'mongoose';
 import { IProduct } from '~/interface/models';
 
@@ -44,6 +44,11 @@ const Product = new mongoose.Schema({
         type: Boolean,
         required: false,
         default: true,
+    },
+
+    image: {
+        type: String,
+        required: false,
     },
 
     product_details: [

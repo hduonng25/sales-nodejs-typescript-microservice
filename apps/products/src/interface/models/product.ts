@@ -18,4 +18,6 @@ export interface IProduct {
     product_details?: IProductDetail[];
 
     is_active?: boolean;
+
+    image?: string;
 }

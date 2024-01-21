@@ -13,6 +13,8 @@ import {
     deleteProduct,
     deleteManyProduct,
     findProducts,
+    getDetails,
+    getDetailsByColorAndSize,
 } from '~/controller';
 import {
     FindReqQuery,
@@ -128,7 +130,7 @@ router.put(
 router.post(
     '/set-image',
     verifyToken,
-    verifyRole('ADMIN'),
+    // verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as setImageProductDetailsBody;
         const result = await setImageProductDetails(body);
@@ -139,7 +141,7 @@ router.post(
 router.put(
     '/set-avatar',
     verifyToken,
-    verifyRole('ADMIN'),
+    // verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as setImageProductDetailsBody;
         const result = await setAvatarProductDetails(body);
@@ -165,6 +167,29 @@ router.put(
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as activeProductDetails;
         const result = await inactiveAndActiveDetails(body);
+        next(result);
+    },
+);
+
+//TODO: Sales
+router.post(
+    '/get-details',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id = req.body.id as string;
+        const result = await getDetails({ id });
+        next(result);
+    },
+);
+
+router.post(
+    '/get-by-color-size',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as {
+            id: string;
+            color: string;
+            size: string;
+        };
+        const result = await getDetailsByColorAndSize({ ...body });
         next(result);
     },
 );
