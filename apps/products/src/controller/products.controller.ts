@@ -520,3 +520,40 @@ export async function getDetailsByColorAndSize(params: {
         });
     return success.ok(product);
 }
+
+export async function getQuantityProduct(params: {
+    id: string;
+}): Promise<Result> {
+    try {
+        const filter: FilterQuery<IProduct> = {
+            'product_details.id': params.id,
+            is_deleted: false,
+        };
+
+        const project = {
+            product_details: 1,
+        };
+
+        const pipelane: PipelineStage[] = [
+            { $match: filter },
+            { $project: project },
+        ];
+
+        const product = await Products.aggregate(pipelane)
+            .collation({ locale: 'vi' })
+            .then(([result]) => {
+                const details = result.product_details?.find(
+                    (d: IProductDetail) => d.id === params.id,
+                );
+
+                return {
+                    id: details.id,
+                    quantity: details.quantity,
+                };
+            });
+        return success.ok(product);
+    } catch (e) {
+        const err = e as Error;
+        return error.exception(err);
+    }
+}

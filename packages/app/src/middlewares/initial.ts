@@ -18,12 +18,9 @@ export const requestInitialization = (
     req.request_id = v1();
     const body = JSON.parse(JSON.stringify(req.body));
     mask(body, ['password', 'accessToken', 'refreshToken']);
-    const client =
-        req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const sourceHostName =
-        req.headers['x-forwarded-for-hostname'] || 'unknown';
-    const sourceNetName =
-        req.headers['x-forwarded-for-netname'] || 'unknown';
+    const client = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const sourceHostName = req.headers['x-forwarded-for-hostname'] || 'unknown';
+    const sourceNetName = req.headers['x-forwarded-for-netname'] || 'unknown';
     const correlationId = req.headers['x-correlation-id'] || v1();
     req.source_hostname = String(sourceHostName);
     req.source_netname = String(sourceNetName);

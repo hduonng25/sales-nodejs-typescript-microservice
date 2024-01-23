@@ -7,9 +7,7 @@ import {
 import { Any } from 'utils';
 import { SortSyntaxError, QuerySyntaxError } from './error';
 
-export function getPath(
-    expression: MemberExpression | Identifier,
-): string {
+export function getPath(expression: MemberExpression | Identifier): string {
     switch (expression.type) {
         case 'MemberExpression': {
             const object = getPath(expression.object);
@@ -25,10 +23,7 @@ export function getPath(
     }
 }
 
-const generateQuery = (
-    exp: Expression,
-    err: QuerySyntaxError,
-): Any => {
+const generateQuery = (exp: Expression, err: QuerySyntaxError): Any => {
     switch (exp.type) {
         case 'ExpressionStatement': {
             return generateQuery(exp.expression, err);
@@ -86,10 +81,7 @@ const generateQuery = (
                             if (typeof arg2.value === 'string') {
                                 const keyword = arg2.value
                                     .trim()
-                                    .replace(
-                                        /[-/\\^$*+?.()|[\]{}]/g,
-                                        '\\$&',
-                                    );
+                                    .replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
                                 result[getPath(arg1)] = {
                                     $regex: keyword,
                                     $options: 'i',

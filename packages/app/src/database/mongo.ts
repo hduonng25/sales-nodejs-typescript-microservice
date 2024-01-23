@@ -3,9 +3,7 @@ import mongoose, { ConnectOptions } from 'mongoose';
 import { AppConfigurations } from '../configs';
 
 let uriConnectMongo = '';
-export const setUriConnectMongo = (
-    configs: AppConfigurations,
-): void => {
+export const setUriConnectMongo = (configs: AppConfigurations): void => {
     uriConnectMongo = configs.mongo?.getUri() as string;
 };
 

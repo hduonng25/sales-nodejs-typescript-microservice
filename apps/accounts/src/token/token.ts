@@ -1,7 +1,4 @@
-import jsonwebtoken, {
-    SignOptions,
-    VerifyOptions,
-} from 'jsonwebtoken';
+import jsonwebtoken, { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import { config } from '../config/config';
 import { NextFunction, Request, Response } from 'express';
 import sha256 from 'crypto-js/sha256';

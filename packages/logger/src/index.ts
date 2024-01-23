@@ -5,10 +5,8 @@ import 'winston-daily-rotate-file';
 import { LogstashTransport } from './transport';
 
 function getTransports(configs?: LoggerConfigurations): Transport[] {
-    const fileEnabled =
-        configs?.logFileEnabled === 'true' ? true : false;
-    const logstashEnabled =
-        configs?.logstashEnabled === 'true' ? true : false;
+    const fileEnabled = configs?.logFileEnabled === 'true' ? true : false;
+    const logstashEnabled = configs?.logstashEnabled === 'true' ? true : false;
     const logsPath = configs?.folderLogsPath || 'logs';
     const options = {
         file: {
@@ -33,9 +31,7 @@ function getTransports(configs?: LoggerConfigurations): Transport[] {
         new winston.transports.Console(options.console),
     ];
     if (fileEnabled) {
-        const transport = new winston.transports.DailyRotateFile(
-            options.file,
-        );
+        const transport = new winston.transports.DailyRotateFile(options.file);
         transports.push(transport);
     }
     if (logstashEnabled) {
@@ -77,17 +73,13 @@ function getOptions(configs?: LoggerConfigurations): LoggerOptions {
             winston.format.timestamp({
                 format: 'YYYY-MM-DD HH:mm:ss.SSS',
             }),
-            winston.format.printf(
-                (info: winston.Logform.TransformableInfo) => {
-                    let tags = '';
-                    if (info.tags && Array.isArray(info.tags)) {
-                        tags = info.tags
-                            .map((t) => `[${t}]`)
-                            .join('');
-                    }
-                    return `${info.timestamp} [${info.level}]${service}${tags}: ${info.message}`;
-                },
-            ),
+            winston.format.printf((info: winston.Logform.TransformableInfo) => {
+                let tags = '';
+                if (info.tags && Array.isArray(info.tags)) {
+                    tags = info.tags.map((t) => `[${t}]`).join('');
+                }
+                return `${info.timestamp} [${info.level}]${service}${tags}: ${info.message}`;
+            }),
         ),
         transports: getTransports(configs),
         exitOnError: false,

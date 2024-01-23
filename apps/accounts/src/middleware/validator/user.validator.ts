@@ -12,8 +12,7 @@ export const createUserSchema = joi
             })
             .regex(/^[a-zA-Z0-9]*$/)
             .messages({
-                'any.required':
-                    'Ho ten khong duoc chua ky tu dac biet',
+                'any.required': 'Ho ten khong duoc chua ky tu dac biet',
             }), //TODO: validate name
 
         adress: joi
@@ -24,8 +23,7 @@ export const createUserSchema = joi
             })
             .regex(/^[a-zA-Z0-9 ]*$/)
             .messages({
-                'any.required':
-                    'Dia chi khong duoc chua ky tu dac biet',
+                'any.required': 'Dia chi khong duoc chua ky tu dac biet',
             }), //TODO: validate adress
 
         phone: joi

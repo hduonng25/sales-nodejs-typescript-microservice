@@ -1,10 +1,6 @@
 import express, { Application, Router } from 'express';
 import 'express-async-errors';
-import {
-    AppConfigurations,
-    configAxios,
-    configLogger,
-} from './configs';
+import { AppConfigurations, configAxios, configLogger } from './configs';
 import { ConfigsRedis, setUriConnectMongo } from './database';
 import { notFoundMiddlewares } from './middlewares/result';
 import {

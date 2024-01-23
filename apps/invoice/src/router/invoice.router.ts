@@ -1,7 +1,8 @@
-import { Payload, verifyToken } from 'app';
+import { Payload, verifyRole, verifyToken } from 'app';
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     addProduct,
+    changeQuantity,
     createInvoiceOffline,
     findInvoices,
     updateStatus,
@@ -9,18 +10,17 @@ import {
 import {
     AddProductBody,
     FindReqQuery,
-    ProductBody,
-    ProductDetails,
+    UpdateQuantityBody,
     UpdateStatusBody,
 } from '~/interface/request';
-import axios from 'axios';
-import { getProductDetails } from '~/service';
+import { getProductDetails, getQuantity } from '~/service';
 
 export const router: Router = Router();
 
 router.get(
     '/',
     verifyToken,
+    verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const query = req.query as unknown as FindReqQuery;
         const result = await findInvoices(query);
@@ -32,6 +32,7 @@ router.get(
 router.post(
     '/offline/',
     verifyToken,
+    // verifyRole('ADMIN'),
     async (req: Request, _: Response, next: NextFunction) => {
         const { name: name_user } = req.payload as Payload;
         const type = req.body.type as string;
@@ -45,17 +46,25 @@ router.post(
 
 router.post(
     '/offline/addProduct',
+    verifyToken,
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as AddProductBody;
-        const respone = await getProductDetails({
-            ...body,
-        });
-
+        const token: string | undefined = req.header('token');
+        const respone = await getProductDetails({ ...body }, token);
         const data = {
             ...body,
             ...respone,
         };
         const result = await addProduct({ ...data });
+        next(result);
+    },
+);
+
+router.put(
+    '/offline/update-quantity',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as UpdateQuantityBody;
+        const result = await changeQuantity({ ...body });
         next(result);
     },
 );

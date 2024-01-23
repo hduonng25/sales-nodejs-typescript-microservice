@@ -1,9 +1,4 @@
-import {
-    NextFunction,
-    Request,
-    RequestHandler,
-    Response,
-} from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import jsonwebtoken, { VerifyOptions } from 'jsonwebtoken';
 import { HttpsStatus } from '../constant';
 import { HttpError } from '../error';
@@ -65,12 +60,8 @@ export async function verifyToken(
 
     try {
         const publicKey = keypublic;
-        const payload = <Payload>(
-            jsonwebtoken.verify(token, publicKey, option)
-        );
+        const payload = <Payload>jsonwebtoken.verify(token, publicKey, option);
         req.payload = payload;
-        console.log(payload + 'patload ==>');
-
         if (payload.type !== 'ACCESS_TOKEN') {
             return next({
                 status: HttpsStatus.UNAUTHORIZED,

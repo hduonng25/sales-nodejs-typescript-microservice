@@ -1,13 +1,21 @@
 export interface ProductBody {
-    id?: string;
+    id: string;
 
-    name?: string;
+    name: string;
 
-    color?: string;
+    color: string;
 
-    size?: string;
+    size: string;
 
-    image?: string;
+    image: string;
+}
+
+export interface UpdateQuantityBody {
+    code: string;
+
+    id_details: string;
+
+    quantity_update: number;
 }
 
 //TODO: Online

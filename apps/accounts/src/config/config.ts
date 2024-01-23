@@ -35,16 +35,12 @@ export const config = {
     log: {
         logFileEnabled: process.env.LAB_LOG_FILE_ENABLED || 'true',
         folderLogsPath:
-            process.env.LAB_FOLDER_LOGS_PATH ||
-            `${__dirname}/../../logs`,
+            process.env.LAB_FOLDER_LOGS_PATH || `${__dirname}/../../logs`,
 
-        logstashEnabled:
-            process.env.LAB_LOG_LOGSTASH_ENABLED || 'false',
-        logstashHost:
-            process.env.LAB_LOG_LOGSTASH_HOST || '127.0.0.1',
+        logstashEnabled: process.env.LAB_LOG_LOGSTASH_ENABLED || 'false',
+        logstashHost: process.env.LAB_LOG_LOGSTASH_HOST || '127.0.0.1',
         logstashPort: process.env.LAB_LOG_LOGSTASH_PORT || '50001',
-        logstashProtocol:
-            process.env.LAB_LOG_LOGSTASH_PROTOCOL || 'udp',
+        logstashProtocol: process.env.LAB_LOG_LOGSTASH_PROTOCOL || 'udp',
     },
 
     keys: {
@@ -55,7 +51,7 @@ export const config = {
     services: {
         mails: {
             mail_prefix: process.env.MAIL_PREFIX || '',
-            mail_host: process.env.MAIL_HOST || '',
+            mail_host: process.env.MAIL_HOST || 'http://127.0.0.1',
             mail_port: process.env.MAIL_PORT || '3000',
             api: function (): string {
                 return `${this.mail_host}:${this.mail_port}${this.mail_prefix}`;

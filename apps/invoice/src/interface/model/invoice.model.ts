@@ -30,15 +30,15 @@ export interface IInvoice {
 
     details?: {
         id: string;
-        quantity?: number;
-        price?: number;
-        money?: number;
+        quantity: number;
+        price: number;
+        money: number;
         product: {
-            id?: string;
-            name?: string;
-            color?: string;
-            size?: string;
-            image?: string;
+            id: string;
+            name: string;
+            color: string;
+            size: string;
+            image: string;
         };
     }[];
 
@@ -47,4 +47,22 @@ export interface IInvoice {
     created_by?: string;
 
     is_deleted?: boolean;
+}
+
+export interface BillDetails {
+    id: string;
+
+    quantity: number;
+
+    price: number;
+
+    money: number;
+
+    product: {
+        id: string;
+        name: string;
+        color: string;
+        size: string;
+        image: string;
+    };
 }

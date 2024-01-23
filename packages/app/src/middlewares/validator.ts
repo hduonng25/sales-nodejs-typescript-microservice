@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import {
-    ValidationError,
-    validationResult,
-} from 'express-validator';
+import { ValidationError, validationResult } from 'express-validator';
 import { HttpsStatus } from '../constant/status';
 import { ResultError } from '../result';
 import { Middleware } from './common';
@@ -63,23 +60,18 @@ function getRequestHandler(
         });
 
         if (result.error) {
-            const validationErrors = result.error.details.map(
-                (item) => {
-                    const param = item.path.join('.');
-                    const value = item.context?.value;
-                    let message = item.message;
-                    message = message.replace(
-                        `"${param}"`,
-                        `'${param}'`,
-                    );
-                    return {
-                        location,
-                        param,
-                        value,
-                        message,
-                    };
-                },
-            );
+            const validationErrors = result.error.details.map((item) => {
+                const param = item.path.join('.');
+                const value = item.context?.value;
+                let message = item.message;
+                message = message.replace(`"${param}"`, `'${param}'`);
+                return {
+                    location,
+                    param,
+                    value,
+                    message,
+                };
+            });
             const resultError: ResultError = {
                 status: HttpsStatus.BAD_REQUEST,
                 errors: validationErrors,

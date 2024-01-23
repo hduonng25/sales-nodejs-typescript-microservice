@@ -59,6 +59,6 @@ export const configs = {
             api: function (): string {
                 return `${this.product_host}:${this.product_port}${this.product_prefix}`;
             },
-        }
-    }
+        },
+    },
 };

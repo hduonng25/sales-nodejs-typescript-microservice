@@ -3,12 +3,7 @@ import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
 import { IInvoice, ItimeLine } from '~/interface/model';
-import {
-    AddProductBody,
-    FindReqQuery,
-    ProductBody,
-    UpdateStatusBody,
-} from '~/interface/request';
+import { FindReqQuery, UpdateStatusBody } from '~/interface/request';
 import { Invoices, TimeLines } from '~/models';
 
 export async function findInvoices(
@@ -47,6 +42,7 @@ export async function findInvoices(
         status: 1,
         type: 1,
         created_time: 1,
+        // reduced_money: 1
     };
 
     const facetData =
@@ -91,52 +87,6 @@ export async function findInvoices(
         });
 
     return success.ok(invoice);
-}
-
-//TODO: Offline
-export async function createInvoiceOffline(params: {
-    name_user: string;
-    type: string;
-}): Promise<Result> {
-    const new_invoice: IInvoice = {
-        id: v1(),
-        type: params.type,
-        created_by: params.name_user,
-    };
-
-    const invoice = new Invoices(new_invoice);
-    await invoice.save();
-    return success.created(invoice);
-}
-
-export async function addProduct(
-    params: AddProductBody,
-): Promise<Result> {
-    const bill_details = {
-        id: v1(),
-        quantity: params.quantity,
-        price: params.price,
-        money: params.price * params.quantity,
-        product: {
-            id: params.id,
-            name: params.name,
-            color: params.color,
-            size: params.size,
-            image: params.image,
-        },
-    };
-
-    const bill = await Invoices.findOneAndUpdate(
-        { code: params.code },
-        {
-            $push: {
-                details: bill_details,
-            },
-        },
-        { new: true },
-    );
-
-    return success.ok(bill);
 }
 
 //TODO: Online
@@ -206,3 +156,5 @@ export async function updateStatus(
         timeLine: timeLine,
     });
 }
+
+//TODO: Offline

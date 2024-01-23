@@ -15,6 +15,7 @@ import {
     findProducts,
     getDetails,
     getDetailsByColorAndSize,
+    getQuantityProduct,
 } from '~/controller';
 import {
     FindReqQuery,
@@ -63,7 +64,6 @@ router.post(
     validate.body(createProductSchema),
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as createProductBody;
-        console.log(req.payload);
         const result = await createProduct(body);
         next(result);
     },
@@ -174,6 +174,7 @@ router.put(
 //TODO: Sales
 router.post(
     '/get-details',
+    verifyToken,
     async (req: Request, _: Response, next: NextFunction) => {
         const id = req.body.id as string;
         const result = await getDetails({ id });
@@ -183,6 +184,7 @@ router.post(
 
 router.post(
     '/get-by-color-size',
+    // verifyToken,
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as {
             id: string;
@@ -190,6 +192,16 @@ router.post(
             size: string;
         };
         const result = await getDetailsByColorAndSize({ ...body });
+        next(result);
+    },
+);
+
+router.post(
+    '/get-quantity',
+    // verifyToken,
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id = req.body.id as string;
+        const result = await getQuantityProduct({ id });
         next(result);
     },
 );

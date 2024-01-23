@@ -6,12 +6,7 @@ import { AppConfigurations } from '../configs';
 import { HttpsStatus } from '../constant/status';
 import errorList, { ErrorData, HttpError } from '../error';
 import { mask } from '../mask';
-import {
-    Result,
-    ResultError,
-    ResultSuccess,
-    error,
-} from '../result';
+import { Result, ResultError, ResultSuccess, error } from '../result';
 import { Middleware } from './common';
 
 //TODO: middleware xu ly respone tra ve phia client
@@ -34,10 +29,7 @@ export function systemInfo() {
     });
     return { hostName, netName };
 }
-export default (
-    env?: string,
-    appConfigs?: AppConfigurations,
-): Middleware => {
+export default (env?: string, appConfigs?: AppConfigurations): Middleware => {
     const func = (
         result: Result | Error,
         request: Request,
@@ -119,11 +111,7 @@ function handleResult(
         }
     }
     const maskedResponseData = { ...responseData };
-    mask(maskedResponseData, [
-        'password',
-        'accessToken',
-        'refreshToken',
-    ]);
+    mask(maskedResponseData, ['password', 'accessToken', 'refreshToken']);
     const correlationId = request.correlation_id;
     const request_id = request.request_id;
     const sourceHostName = request.source_hostname;
@@ -134,16 +122,10 @@ function handleResult(
     const requestBody = JSON.parse(JSON.stringify(request.body));
     mask(requestBody, ['password', 'accessToken', 'refreshToken']);
     const sourceService =
-        request.headers['x-forwarded-for'] ||
-        request.socket.remoteAddress;
+        request.headers['x-forwarded-for'] || request.socket.remoteAddress;
     const url = request.url;
     const destService = appConfigs?.service;
-    logResponse(
-        request_id,
-        statusCode,
-        maskedResponseData,
-        correlationId,
-    );
+    logResponse(request_id, statusCode, maskedResponseData, correlationId);
     response.status(statusCode).json(responseData);
 }
 
@@ -172,9 +154,7 @@ export const notFoundMiddlewares = (
     _: Response,
     next: NextFunction,
 ): void => {
-    const requestedUrl = `${req.protocol}://${req.get('Host')}${
-        req.url
-    }`;
+    const requestedUrl = `${req.protocol}://${req.get('Host')}${req.url}`;
     const error = {
         status: HttpsStatus.NOT_FOUND,
         code: 'URL_NOT_FOUND',
