@@ -2,5 +2,5 @@
     "watch": ["src"],
     "ext": "ts",
     "ignore": ["src/**/*.test.ts"],
-    "exec": "npx ts-node ./src/ts.user.ts"
+    "exec": "npx ts-node ./src/ts.auth.ts"
 }

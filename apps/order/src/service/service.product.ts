@@ -9,17 +9,12 @@ const api = axios.create({
 
 export async function getProductDetails(
     params: AddProductBody,
-    token?: string,
 ): Promise<ProductDetails | undefined> {
-    const headers = {
-        token: `${token}`,
-    };
-
     const url = `/get-by-color-size`;
     const errors = error.services(url);
 
     try {
-        const details = await api.post(url, params, { headers });
+        const details = await api.post(url, params);
         if (details.status !== HttpsStatus.OK) {
             throw new HttpError(errors);
         }

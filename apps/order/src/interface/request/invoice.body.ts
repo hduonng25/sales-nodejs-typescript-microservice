@@ -20,9 +20,13 @@ export interface UpdateQuantityBody {
 
 //TODO: Online
 export interface UpdateStatusBody {
-    code: string;
+    code: string[];
 
     status: string;
+
+    id_user: string;
+    
+    name_user: string;
 }
 
 //TODO: Offline

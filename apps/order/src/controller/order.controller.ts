@@ -25,12 +25,24 @@ async function createBillDetails(
             image: params.image,
         },
     };
-
     return details;
 }
 
 //TODO: Offline
-export async function createInvoiceOffline(params: {
+export async function getOrderOffline(): Promise<Result> {
+    try {
+        const invoice = await Invoices.find({
+            status: 'unpaid',
+            is_deleted: false,
+        });
+        return success.ok(invoice);
+    } catch (e) {
+        const err = e as Error;
+        return error.exception(err);
+    }
+}
+
+export async function createOrderOffline(params: {
     name_user: string;
     type: string;
 }): Promise<Result> {
@@ -38,6 +50,7 @@ export async function createInvoiceOffline(params: {
         id: v1(),
         type: params.type,
         created_by: params.name_user,
+        status: 'unpaid',
     };
 
     const invoice = new Invoices(new_invoice);
@@ -139,6 +152,23 @@ export async function changeQuantity(params: UpdateQuantityBody) {
             await invoice.save();
             return success.ok(invoice);
         }
+    } catch (e) {
+        const err = e as Error;
+        return error.exception(err);
+    }
+}
+
+export async function cancelOrder(params: { code: string }) {
+    try {
+        const invoice = await Invoices.findOneAndUpdate(
+            { code: params.code },
+            { $set: { is_deleted: true } },
+            { new: true },
+        );
+        return success.ok({
+            mess: 'cancel order successfuly',
+            invoice: invoice,
+        });
     } catch (e) {
         const err = e as Error;
         return error.exception(err);

@@ -25,6 +25,8 @@ const invoice = new mongoose.Schema({
             'shipping',
             'completed',
             'voided',
+            'unpaid',
+            'paid',
         ],
         required: false,
         default: 'created',

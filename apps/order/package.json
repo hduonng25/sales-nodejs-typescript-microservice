@@ -1,14 +1,14 @@
 {
-    "name": "invoice",
+    "name": "order",
     "version": "1.0.0",
     "description": "",
-    "main": "build/ts.invoice.js",
+    "main": "build/ts.order.js",
     "scripts": {
         "build": "npx tsc --incremental",
         "clean": "rm -rf build tsconfig.tsbuildinfo",
         "lint": "npx eslint src/** --fix --cache",
         "format": "npx prettier --write \"!**/build\" \"**/*.{ts,tsx,md,js,json}\"",
-        "start": "node build/ts.invoice.js",
+        "start": "node build/ts.order.js",
         "start:dev": "npx nodemon",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

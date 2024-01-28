@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export const configs = {
     environment: 'dev',
-    service: 'invoice',
+    service: 'order',
     mongo: {
         dbName: process.env.DB_NAME || '',
         username: process.env.USER_DB || '',
@@ -27,7 +27,7 @@ export const configs = {
     },
 
     app: {
-        prefix: '/api',
+        prefix: '/api/invoice',
         host: process.env.HOST_MAIN || '0.0.0.0',
         port: process.env.PORT_NODE,
     },

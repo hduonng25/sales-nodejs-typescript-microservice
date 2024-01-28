@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export const config = {
     environment: 'dev',
-    service: 'user',
+    service: 'auth',
     mongo: {
         dbName: process.env.DB_NAME || '',
         username: process.env.USER_DB || '',

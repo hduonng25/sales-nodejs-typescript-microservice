@@ -174,7 +174,6 @@ router.put(
 //TODO: Sales
 router.post(
     '/get-details',
-    verifyToken,
     async (req: Request, _: Response, next: NextFunction) => {
         const id = req.body.id as string;
         const result = await getDetails({ id });
@@ -184,7 +183,6 @@ router.post(
 
 router.post(
     '/get-by-color-size',
-    // verifyToken,
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as {
             id: string;
@@ -198,7 +196,6 @@ router.post(
 
 router.post(
     '/get-quantity',
-    // verifyToken,
     async (req: Request, _: Response, next: NextFunction) => {
         const id = req.body.id as string;
         const result = await getQuantityProduct({ id });
