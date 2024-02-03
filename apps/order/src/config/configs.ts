@@ -27,7 +27,7 @@ export const configs = {
     },
 
     app: {
-        prefix: '/api/invoice',
+        prefix: '/api',
         host: process.env.HOST_MAIN || '0.0.0.0',
         port: process.env.PORT_NODE,
     },

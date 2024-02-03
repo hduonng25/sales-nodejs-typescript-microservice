@@ -8,7 +8,7 @@ interface Product {
 
     is_deleted?: boolean;
 
-    quantity?: number;
+    quantity: number;
 
     price?: number;
 
@@ -43,7 +43,7 @@ interface ProductDetails {
 
     status?: string;
 
-    quantity?: number;
+    quantity: number;
 
     is_deleted?: string;
 

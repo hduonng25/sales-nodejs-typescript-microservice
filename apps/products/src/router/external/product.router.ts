@@ -16,6 +16,7 @@ import {
     getDetails,
     getDetailsByColorAndSize,
     getQuantityProduct,
+    updateQuantity,
 } from '~/controller';
 import {
     FindReqQuery,
@@ -171,7 +172,6 @@ router.put(
     },
 );
 
-//TODO: Sales
 router.post(
     '/get-details',
     async (req: Request, _: Response, next: NextFunction) => {
@@ -202,3 +202,4 @@ router.post(
         next(result);
     },
 );
+

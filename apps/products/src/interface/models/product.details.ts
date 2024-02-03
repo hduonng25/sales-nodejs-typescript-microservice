@@ -7,7 +7,7 @@ export interface IProductDetail {
 
     created_date?: Date;
 
-    quantity?: number;
+    quantity: number;
 
     size: {
         id: string;

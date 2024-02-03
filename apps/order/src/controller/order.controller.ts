@@ -1,13 +1,18 @@
-import { Result, error, success } from 'app';
+import { HttpsStatus, Result, error, success } from 'app';
 import { v1 } from 'uuid';
 import { BillDetails, IInvoice } from '~/interface/model';
 import {
     AddProductBody,
+    InvoiceReqBody,
     ProductDetails,
     UpdateQuantityBody,
 } from '~/interface/request';
 import { Invoices } from '~/models';
-import { getQuantity } from '~/service';
+import {
+    getCheckProduct,
+    getQuantity,
+    updateQuantityProduct,
+} from '~/service';
 
 async function createBillDetails(
     params: AddProductBody,
@@ -73,6 +78,17 @@ export async function addProduct(
                 param: 'bill',
                 message: 'bill invalidted',
             });
+
+        const product: ProductDetails = await getQuantity({
+            id: params.id,
+        });
+
+        if (params.quantity > product.quantity) {
+            return error.baseError({
+                location: 'quantity',
+                message: 'quantity so big',
+            });
+        }
 
         const newProduct = createBillDetails(params);
         let checkExitsProduct = invoice.details?.find(
@@ -173,4 +189,138 @@ export async function cancelOrder(params: { code: string }) {
         const err = e as Error;
         return error.exception(err);
     }
+}
+
+export async function cancelOrderMany(params: {
+    code: string[];
+}): Promise<Result> {
+    try {
+        await Invoices.updateMany(
+            {
+                code: { $in: params.code },
+                is_deleted: false,
+            },
+            { $set: { is_deleted: true } },
+            { new: true },
+        );
+
+        return success.ok({
+            mes: 'cancel invoice successfuly',
+        });
+    } catch (e) {
+        return error.notFound({});
+    }
+}
+
+export async function payOrder(params: {
+    code: string;
+}): Promise<Result> {
+    try {
+        const invoice = await Invoices.findOne({
+            code: params.code,
+            is_deleted: false,
+        });
+
+        if (
+            invoice &&
+            invoice.is_deleted == false &&
+            invoice.status == 'unpaid'
+        ) {
+            const invoiceSuccess = await Invoices.findOneAndUpdate(
+                { code: params.code, is_deleted: false },
+                { $set: { status: 'paid' } },
+                { new: true },
+            );
+
+            let details = invoice.details;
+            if (details) {
+                details.forEach(async (item: BillDetails) => {
+                    let data = {
+                        id: item.product.id,
+                        quantity: item.quantity,
+                    };
+                    await updateQuantityProduct({ ...data });
+                });
+            }
+
+            return success.ok({
+                mess: 'pay invoice successfuly',
+                invoice: invoiceSuccess,
+            });
+        } else {
+            return error.notFound({});
+        }
+    } catch (e) {
+        return error.services('Internal Server');
+    }
+}
+
+//TODO: Online
+export async function creareOrderOnline(
+    params: {} & InvoiceReqBody,
+): Promise<Result> {
+    let total_amount: number = 0;
+
+    let items: Array<{
+        id: string;
+        quantity: number;
+        price: number;
+        money: number;
+        product: {
+            id: string;
+            name: string;
+            color: string;
+            size: string;
+            image: string;
+        };
+    }> = [];
+
+    for (let i = 0; i < params.item.length; i++) {
+        const e = params.item[i];
+        const check = await Promise.all([
+            getCheckProduct({ id: e.product }),
+        ]);
+
+        if (check[0].status !== 200) {
+            return {
+                code: 'NOT_FOUND',
+                status: HttpsStatus.NOT_FOUND,
+                errors: [
+                    {
+                        location: 'body',
+                        param: 'id',
+                    },
+                ],
+            };
+        } else {
+            const price = check[0].body?.price as number;
+            const newItem = {
+                id: v1(),
+                quantity: e.quantity as number,
+                price: price as number,
+                money: (price * e.quantity) as number,
+                product: {
+                    id: check[0].body?.id as string,
+                    name: check[0].body?.name as string,
+                    color: check[0].body?.color as string,
+                    size: check[0].body?.size as string,
+                    image: check[0].body?.image as string,
+                },
+            };
+
+            items.push(newItem);
+            total_amount += newItem.money;
+        }
+    }
+    const invoice = new Invoices({
+        id: v1(),
+        status: 'created',
+        type: 'online',
+        details: items,
+        order_money: total_amount,
+        bill_money: total_amount,
+    });
+
+    await invoice.save();
+    return success.created({ ...invoice.toJSON() });
 }

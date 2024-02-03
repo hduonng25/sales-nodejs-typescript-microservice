@@ -513,6 +513,7 @@ export async function getDetailsByColorAndSize(params: {
                 id: details.id,
                 name: result.name,
                 price: result.price,
+                quantity: details.quantity,
                 image: image[0].name,
                 color: details.color.name,
                 size: details.size.name,
@@ -555,5 +556,40 @@ export async function getQuantityProduct(params: {
     } catch (e) {
         const err = e as Error;
         return error.exception(err);
+    }
+}
+
+export async function updateQuantity(params: {
+    id: string;
+    quantity: number;
+}) {
+    try {
+        const product = await Products.findOne({
+            'product_details.id': params.id,
+        });
+
+        if (product && product.product_details) {
+            let detail = product.product_details?.find(
+                (item: IProductDetail) => item.id === params.id,
+            );
+
+            if (detail) {
+                const quantity = detail?.quantity as number;
+                const quantityChange = (quantity -
+                    params.quantity) as number;
+
+                if (quantityChange < 0) {
+                    return error.baseError({
+                        message: 'quantity is less than 0',
+                    });
+                }
+
+                detail.quantity = quantityChange;
+                await product.save();
+                return success.ok(product);
+            }
+        }
+    } catch (e) {
+        return error.notFound({});
     }
 }

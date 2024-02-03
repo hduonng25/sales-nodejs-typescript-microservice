@@ -2,12 +2,16 @@ import { NextFunction, Request, Response, Router } from 'express';
 import {
     addProduct,
     cancelOrder,
+    cancelOrderMany,
     changeQuantity,
+    creareOrderOnline,
     createOrderOffline,
     getOrderOffline,
+    payOrder,
 } from '~/controller';
 import {
     AddProductBody,
+    InvoiceReqBody,
     UpdateQuantityBody,
 } from '~/interface/request';
 
@@ -59,6 +63,34 @@ router.put(
             code: string;
         };
         const result = await cancelOrder({ ...body });
+        next(result);
+    },
+);
+
+router.put(
+    '/offline/cancelMany',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const code = req.body.code as string[];
+        const result = await cancelOrderMany({ code });
+        next(result);
+    },
+);
+
+router.put(
+    '/offline/pay',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const code = req.body.code as string;
+        const result = await payOrder({ code });
+        next(result);
+    },
+);
+
+//TODO: Online
+router.post(
+    '/online/created',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as InvoiceReqBody;
+        const result = await creareOrderOnline({ ...body });
         next(result);
     },
 );

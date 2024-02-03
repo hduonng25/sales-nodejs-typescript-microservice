@@ -25,8 +25,19 @@ export interface UpdateStatusBody {
     status: string;
 
     id_user: string;
-    
+
     name_user: string;
+}
+
+export interface InvoiceReqBody {
+    item: [
+        {
+            product: string;
+            quantity: number;
+        },
+    ];
+
+    customer?: string;
 }
 
 //TODO: Offline
