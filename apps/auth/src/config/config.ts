@@ -35,12 +35,16 @@ export const config = {
     log: {
         logFileEnabled: process.env.LAB_LOG_FILE_ENABLED || 'true',
         folderLogsPath:
-            process.env.LAB_FOLDER_LOGS_PATH || `${__dirname}/../../logs`,
+            process.env.LAB_FOLDER_LOGS_PATH ||
+            `${__dirname}/../../logs`,
 
-        logstashEnabled: process.env.LAB_LOG_LOGSTASH_ENABLED || 'false',
-        logstashHost: process.env.LAB_LOG_LOGSTASH_HOST || '127.0.0.1',
+        logstashEnabled:
+            process.env.LAB_LOG_LOGSTASH_ENABLED || 'false',
+        logstashHost:
+            process.env.LAB_LOG_LOGSTASH_HOST || '127.0.0.1',
         logstashPort: process.env.LAB_LOG_LOGSTASH_PORT || '50001',
-        logstashProtocol: process.env.LAB_LOG_LOGSTASH_PROTOCOL || 'udp',
+        logstashProtocol:
+            process.env.LAB_LOG_LOGSTASH_PROTOCOL || 'udp',
     },
 
     keys: {

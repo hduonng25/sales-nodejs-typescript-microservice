@@ -60,5 +60,14 @@ export const configs = {
                 return `${this.product_host}:${this.product_port}${this.product_prefix}`;
             },
         },
+
+        user: {
+            user_prefix: process.env.USER_PREFIX || '',
+            user_host: process.env.USER_HOST || '',
+            user_port: process.env.USER_PORT || '2502',
+            api: function (): string {
+                return `${this.user_host}:${this.user_port}${this.user_prefix}`;
+            },
+        },
     },
 };

@@ -566,6 +566,7 @@ export async function updateQuantity(params: {
     try {
         const product = await Products.findOne({
             'product_details.id': params.id,
+            'product_details.status': true,
         });
 
         if (product && product.product_details) {
@@ -582,6 +583,8 @@ export async function updateQuantity(params: {
                     return error.baseError({
                         message: 'quantity is less than 0',
                     });
+                } else if (quantityChange == 0) {
+                    detail.status = false;
                 }
 
                 detail.quantity = quantityChange;

@@ -4,11 +4,14 @@ import { loginBody } from '~/interface/request';
 
 export const router: Router = Router();
 
-router.post('/', async (req: Request, _: Response, next: NextFunction) => {
-    const body = req.body as loginBody;
-    const result = await login({ ...body });
-    next(result);
-});
+router.post(
+    '/',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as loginBody;
+        const result = await login({ ...body });
+        next(result);
+    },
+);
 
 router.post(
     '/refresh-token',

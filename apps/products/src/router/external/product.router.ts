@@ -193,13 +193,3 @@ router.post(
         next(result);
     },
 );
-
-router.post(
-    '/get-quantity',
-    async (req: Request, _: Response, next: NextFunction) => {
-        const id = req.body.id as string;
-        const result = await getQuantityProduct({ id });
-        next(result);
-    },
-);
-

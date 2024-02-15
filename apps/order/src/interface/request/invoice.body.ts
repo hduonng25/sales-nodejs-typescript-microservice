@@ -37,7 +37,7 @@ export interface InvoiceReqBody {
         },
     ];
 
-    customer?: string;
+    customer: string;
 }
 
 //TODO: Offline

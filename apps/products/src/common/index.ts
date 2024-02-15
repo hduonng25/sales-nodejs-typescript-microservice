@@ -1,1 +1,1 @@
-export * from "./product.common"
+export * from './product.common';

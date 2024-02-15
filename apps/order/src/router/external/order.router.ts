@@ -4,10 +4,11 @@ import {
     cancelOrder,
     cancelOrderMany,
     changeQuantity,
-    creareOrderOnline,
+    createOrderOnline,
     createOrderOffline,
     getOrderOffline,
     payOrder,
+    payOrderOnline,
 } from '~/controller';
 import {
     AddProductBody,
@@ -90,7 +91,18 @@ router.post(
     '/online/created',
     async (req: Request, _: Response, next: NextFunction) => {
         const body = req.body as InvoiceReqBody;
-        const result = await creareOrderOnline({ ...body });
+        const result = await createOrderOnline({ ...body });
+        next(result);
+    },
+);
+
+router.put(
+    '/online/pay',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as {
+            code: string;
+        };
+        const result = await payOrderOnline({ ...body });
         next(result);
     },
 );

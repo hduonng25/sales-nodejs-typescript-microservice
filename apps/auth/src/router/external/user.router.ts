@@ -1,4 +1,4 @@
-import { validate, verifyRole } from 'app';
+import { validate } from 'app';
 import { NextFunction, Request, Response, Router } from 'express';
 import {
     changePassword,
@@ -19,17 +19,23 @@ import { createUserSchema } from '~/middleware/validator';
 
 export const router: Router = Router();
 
-router.get('/', async (req: Request, _: Response, next: NextFunction) => {
-    const query = req.query as unknown as FindReqQuery;
-    const result = await getUser(query);
-    next(result);
-});
+router.get(
+    '/',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const query = req.query as unknown as FindReqQuery;
+        const result = await getUser(query);
+        next(result);
+    },
+);
 
-router.get('/:id', async (req: Request, _: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const result = await getByID(id);
-    next(result);
-});
+router.get(
+    '/:id',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id = req.params.id;
+        const result = await getByID(id);
+        next(result);
+    },
+);
 
 router.post(
     '/',
@@ -41,11 +47,14 @@ router.post(
     },
 );
 
-router.put('/', async (req: Request, _: Response, next: NextFunction) => {
-    const body = req.body as updateUserBody;
-    const result = await updateUser(body);
-    next(result);
-});
+router.put(
+    '/',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as updateUserBody;
+        const result = await updateUser(body);
+        next(result);
+    },
+);
 
 router.put(
     '/change-pass',
@@ -56,11 +65,14 @@ router.put(
     },
 );
 
-router.put('/delete', async (req: Request, _: Response, next: NextFunction) => {
-    const id = req.body.id as string;
-    const result = await deleteOne({ id });
-    next(result);
-});
+router.put(
+    '/delete',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id = req.body.id as string;
+        const result = await deleteOne({ id });
+        next(result);
+    },
+);
 
 router.put(
     '/delete-many',

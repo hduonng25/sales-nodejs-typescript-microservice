@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import { configs } from '~/config';
 import { HttpError, HttpsStatus, error } from 'app';
 import { ProductDetails } from '~/interface/request';
-import { string } from 'joi';
 
 const api = axios.create({
     baseURL: configs.services.product.api(),

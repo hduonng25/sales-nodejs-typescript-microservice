@@ -1,9 +1,16 @@
 import { loginBody } from '~/interface/request';
 import Users from '~/model/user.model';
 import bcrypt from 'bcrypt';
-import { genAccessToken, genRefreshToken, getPayload } from '~/token';
+import {
+    genAccessToken,
+    genRefreshToken,
+    getPayload,
+} from '~/token';
 import { HttpsStatus, Result, success } from 'app';
-import { accountNotFoundError, wrongPasswordError } from '~/middleware/common';
+import {
+    accountNotFoundError,
+    wrongPasswordError,
+} from '~/middleware/common';
 
 export async function login(params: loginBody): Promise<Result> {
     try {
@@ -25,7 +32,8 @@ export async function login(params: loginBody): Promise<Result> {
                     : new Date();
 
                 const now = new Date();
-                const diffInMicrosecond = now.getTime() - lastLocked.getTime();
+                const diffInMicrosecond =
+                    now.getTime() - lastLocked.getTime();
                 const diffInMinutes = Math.ceil(
                     diffInMicrosecond / (60 * 1000),
                 );
@@ -76,7 +84,8 @@ export async function login(params: loginBody): Promise<Result> {
                 await account.save();
                 return success.ok(data);
             } else {
-                account.failed_login = (account.failed_login || 0) + 1;
+                account.failed_login =
+                    (account.failed_login || 0) + 1;
                 await account.save();
                 return wrongPasswordError();
             }
@@ -88,7 +97,9 @@ export async function login(params: loginBody): Promise<Result> {
     }
 }
 
-export async function newToken(refreshToken: string): Promise<Result> {
+export async function newToken(
+    refreshToken: string,
+): Promise<Result> {
     const payload = getPayload(refreshToken);
     const errors = [
         {

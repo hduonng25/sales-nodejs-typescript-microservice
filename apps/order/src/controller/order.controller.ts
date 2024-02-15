@@ -10,6 +10,7 @@ import {
 import { Invoices } from '~/models';
 import {
     getCheckProduct,
+    getCheckUser,
     getQuantity,
     updateQuantityProduct,
 } from '~/service';
@@ -256,7 +257,7 @@ export async function payOrder(params: {
 }
 
 //TODO: Online
-export async function creareOrderOnline(
+export async function createOrderOnline(
     params: {} & InvoiceReqBody,
 ): Promise<Result> {
     let total_amount: number = 0;
@@ -312,15 +313,78 @@ export async function creareOrderOnline(
             total_amount += newItem.money;
         }
     }
-    const invoice = new Invoices({
-        id: v1(),
-        status: 'created',
-        type: 'online',
-        details: items,
-        order_money: total_amount,
-        bill_money: total_amount,
-    });
+    const checkUser = await getCheckUser({ id: params.customer });
+    if (checkUser.status !== 200) {
+        return {
+            code: 'NOT_FOUND',
+            status: HttpsStatus.NOT_FOUND,
+            errors: [
+                {
+                    location: 'body',
+                    param: 'id',
+                },
+            ],
+        };
+    } else {
+        const invoice = new Invoices({
+            id: v1(),
+            status: 'created',
+            type: 'online',
+            details: items,
+            order_money: total_amount,
+            bill_money: total_amount,
+            created_by: checkUser.body?.name,
+            email_receiver: checkUser.body?.email,
+            phone_receiver: checkUser.body?.phone,
+            name_receiver: checkUser.body?.name,
+            adress_receiver: checkUser.body?.name,
+        });
 
-    await invoice.save();
-    return success.created({ ...invoice.toJSON() });
+        await invoice.save();
+        return success.created({ ...invoice.toJSON() });
+    }
 }
+
+export async function payOrderOnline(params: { code: string }) {
+    try {
+        const invoice = await Invoices.findOne({
+            code: params.code,
+            is_deleted: false,
+        });
+
+        if (
+            invoice &&
+            invoice.is_deleted == false &&
+            invoice.status == 'created'
+        ) {
+            const invoiceSuccess = await Invoices.findOneAndUpdate(
+                { code: params.code, is_deleted: false },
+                { $set: { status: 'created' } },
+                { new: true },
+            );
+
+            let details = invoice.details;
+            if (details) {
+                details.forEach(async (item: BillDetails) => {
+                    let data = {
+                        id: item.product.id,
+                        quantity: item.quantity,
+                    };
+
+                    await updateQuantityProduct({ ...data });
+                });
+            }
+
+            return success.ok({
+                mess: 'pay order successfuly',
+                invoice: invoiceSuccess,
+            });
+        } else {
+            return error.notFound({});
+        }
+    } catch (e) {
+        return error.services('Internal service');
+    }
+}
+
+//Lam not payment, payos

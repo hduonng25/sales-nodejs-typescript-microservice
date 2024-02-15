@@ -1,8 +1,17 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { checkProduct } from '~/common';
-import { updateQuantity } from '~/controller';
+import { getQuantityProduct, updateQuantity } from '~/controller';
 
 export const router: Router = Router();
+
+router.post(
+    '/get-quantity',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const id = req.body.id as string;
+        const result = await getQuantityProduct({ id });
+        next(result);
+    },
+);
 
 router.put(
     '/update-quantity',

@@ -14,7 +14,9 @@ import { IUser } from '~/interface/model';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery } from 'mquery';
 
-export async function getUser(params: FindReqQuery): Promise<Result> {
+export async function getUser(
+    params: FindReqQuery,
+): Promise<Result> {
     let filter: FilterQuery<IUser> = {
         is_deleted: false,
     };
@@ -76,7 +78,9 @@ export async function getUser(params: FindReqQuery): Promise<Result> {
         .collation({ locale: 'vi' })
         .then((res) => res[0])
         .then(async (res) => {
-            const total = !(res.meta.length > 0) ? 0 : res.meta[0].total;
+            const total = !(res.meta.length > 0)
+                ? 0
+                : res.meta[0].total;
             let totalPage = Math.ceil(total / params.size);
             totalPage = totalPage > 0 ? totalPage : 1;
 
@@ -95,13 +99,18 @@ export async function getByID(id: any): Promise<Result> {
     return success.ok(user);
 }
 
-export async function createUser(params: createUserBody): Promise<Result> {
+export async function createUser(
+    params: createUserBody,
+): Promise<Result> {
     await checkExitsAccount({
         email: params.email,
         phone: params.phone,
     });
 
-    const password = await bcrypt.hash(params.password.toString(), 10);
+    const password = await bcrypt.hash(
+        params.password.toString(),
+        10,
+    );
 
     const new_user: IUser = {
         id: v1(),
@@ -121,7 +130,9 @@ export async function createUser(params: createUserBody): Promise<Result> {
     return success.ok(user);
 }
 
-export async function updateUser(params: updateUserBody): Promise<Result> {
+export async function updateUser(
+    params: updateUserBody,
+): Promise<Result> {
     await checkExitsAccount({
         email: params.email,
         phone: params.phone,
@@ -164,7 +175,10 @@ export async function changePassword(
         params.password_old.toString(),
         user.password as string,
     );
-    const password = await bcrypt.hash(params.password_new.toString(), 10);
+    const password = await bcrypt.hash(
+        params.password_new.toString(),
+        10,
+    );
 
     if (!checkPass)
         return error.notFound({
@@ -181,7 +195,9 @@ export async function changePassword(
     return success.ok(update);
 }
 
-export async function deleteOne(params: { id: string }): Promise<Result> {
+export async function deleteOne(params: {
+    id: string;
+}): Promise<Result> {
     const user = await Users.findOneAndUpdate(
         { id: params.id },
         { $set: { is_deleted: true } },
@@ -190,7 +206,9 @@ export async function deleteOne(params: { id: string }): Promise<Result> {
     return success.ok(user);
 }
 
-export async function deleteMany(params: { id: string[] }): Promise<Result> {
+export async function deleteMany(params: {
+    id: string[];
+}): Promise<Result> {
     await Promise.all(
         params.id.map(async (id: string) => {
             await Users.findOneAndUpdate(
