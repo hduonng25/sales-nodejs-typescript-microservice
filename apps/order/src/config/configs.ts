@@ -69,5 +69,14 @@ export const configs = {
                 return `${this.user_host}:${this.user_port}${this.user_prefix}`;
             },
         },
+
+        payment: {
+            payment_prefix: process.env.PAYMENT_PREFIX || '',
+            payment_host: process.env.PAYMENT_HOST || '',
+            payment_port: process.env.PAYMENT_PORT || '3005',
+            api: function (): string {
+                return `${this.payment_host}:${this.payment_port}${this.payment_prefix}`;
+            },
+        },
     },
 };

@@ -17,6 +17,11 @@ const invoice = new mongoose.Schema({
         }${date.getDate()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`,
     },
 
+    orderCode: {
+        type: Number,
+        required: false,
+    },
+
     status: {
         type: String,
         enum: [

@@ -9,6 +9,8 @@ import {
     getOrderOffline,
     payOrder,
     payOrderOnline,
+    payment,
+    updateInvoice,
 } from '~/controller';
 import {
     AddProductBody,
@@ -103,6 +105,26 @@ router.put(
             code: string;
         };
         const result = await payOrderOnline({ ...body });
+        next(result);
+    },
+);
+
+router.post(
+    '/online/payment',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const body = req.body as {
+            orderCode: string;
+        };
+        const result = await payment({ ...body });
+        next(result);
+    },
+);
+
+router.put(
+    '/online/update',
+    async (req: Request, _: Response, next: NextFunction) => {
+        const orderCode = req.body.orderCode;
+        const result = await updateInvoice({ orderCode: orderCode });
         next(result);
     },
 );

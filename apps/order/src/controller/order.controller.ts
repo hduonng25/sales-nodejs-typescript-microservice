@@ -14,6 +14,7 @@ import {
     getQuantity,
     updateQuantityProduct,
 } from '~/service';
+import { getCreateOrder, getOrder } from '~/service/service.payment';
 
 async function createBillDetails(
     params: AddProductBody,
@@ -387,4 +388,75 @@ export async function payOrderOnline(params: { code: string }) {
     }
 }
 
-//Lam not payment, payos
+export async function payment(params: {
+    orderCode: string;
+}): Promise<Result> {
+    try {
+        const invoice = await Invoices.findOne({
+            code: params.orderCode,
+            is_deleted: false,
+        });
+        if (invoice && invoice.bill_money && invoice.code) {
+            const order = await getCreateOrder({
+                amount: Math.ceil(invoice.bill_money),
+            });
+            if (order) {
+                invoice.orderCode = order.body?.orderCode as number;
+                await invoice.save();
+                return success.ok({
+                    ...invoice.toJSON(),
+                    link: order.body,
+                });
+            }
+        }
+        return error.notFound({});
+    } catch (e) {
+        return error.services('Internal Server');
+    }
+}
+
+export async function updateInvoice(params: {
+    orderCode: string;
+}): Promise<Result> {
+    try {
+        const order = await getOrder({
+            orderCode: params.orderCode,
+        });
+        console.log(order.body?.status);
+
+        const invoice = await Invoices.findOne({
+            orderCode: params.orderCode,
+            is_deleted: false,
+        });
+        if (order && order.body?.status == 'PAID') {
+            const invoiceSuccess = await Invoices.findOneAndUpdate(
+                { orderCode: params.orderCode, is_deleted: false },
+                {
+                    $set: { status: 'created' },
+                },
+                { new: true },
+            );
+
+            return success.ok(invoiceSuccess);
+        } else if (order && order.body?.status === 'CANCELLED') {
+            const invoiceFaild = await Invoices.findOneAndUpdate(
+                { orderCode: params.orderCode, is_deleted: false },
+                {
+                    $set: {
+                        status: 'voided',
+                    },
+                },
+                { new: true },
+            );
+            return success.ok(invoiceFaild);
+        } else {
+            if (invoice) {
+                return success.ok(invoice);
+            } else {
+                return error.notFound({});
+            }
+        }
+    } catch (e) {
+        return error.services('Internal server');
+    }
+}

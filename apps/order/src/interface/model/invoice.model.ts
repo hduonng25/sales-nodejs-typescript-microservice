@@ -3,6 +3,8 @@ export interface IInvoice {
 
     code?: string;
 
+    orderCode?: number;
+
     status?: string;
 
     type?: string;
