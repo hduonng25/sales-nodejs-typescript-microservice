@@ -21,26 +21,6 @@ router.post(
 );
 
 router.get(
-    '/faild',
-    async (_: Request, res: Response, next: NextFunction) => {
-        const mess = 'payment faild';
-        res.send({
-            mess: mess,
-        });
-    },
-);
-
-router.get(
-    '/success',
-    async (_: Request, res: Response, next: NextFunction) => {
-        const mess = 'payment success';
-        res.send({
-            mess: mess,
-        });
-    },
-);
-
-router.get(
     '/:orderId',
     async (req: Request, _: Response, next: NextFunction) => {
         const orderId = req.params.orderId;
