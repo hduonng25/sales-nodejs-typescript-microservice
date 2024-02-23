@@ -13,6 +13,7 @@
     "author": "ts_sales",
     "license": "ISC",
     "dependencies": {
+        "@nestjs/jwt": "^10.2.0",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.2.1",

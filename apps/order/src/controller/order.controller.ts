@@ -14,7 +14,7 @@ import {
     getQuantity,
     updateQuantityProduct,
 } from '~/service';
-import { getCreateOrder, getOrder } from '~/service/service.payment';
+import { getCreateOrder, getOrder } from '~/service/payment.service';
 
 async function createBillDetails(
     params: AddProductBody,
