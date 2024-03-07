@@ -9,9 +9,9 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-        "baseUrl": ".", // Đường dẫn base cho các import
+        "baseUrl": ".",
         "paths": {
-            "~/*": ["src/*"] // Đường dẫn tương đối cho các import (alias)
+            "~/*": ["src/*"]
         }
     },
     "ts-node": {
