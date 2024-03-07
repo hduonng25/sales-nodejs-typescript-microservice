@@ -2,9 +2,9 @@ import { HttpError, Result, error, success } from 'app';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
-import { IInvoice, ItimeLine } from '~/interface/model';
-import { FindReqQuery, UpdateStatusBody } from '~/interface/request';
-import { Invoices, TimeLines } from '~/models';
+import { IInvoice, ItimeLine } from '../interface/model';
+import { FindReqQuery, UpdateStatusBody } from '../interface/request';
+import { Invoices, TimeLines } from '../models';
 
 export async function findInvoices(
     params: FindReqQuery,

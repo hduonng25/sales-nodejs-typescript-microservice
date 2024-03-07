@@ -8,14 +8,14 @@ import {
     getByID,
     getUser,
     updateUser,
-} from '~/controller';
+} from '../../controller';
 import {
     FindReqQuery,
     changePasswordBody,
     createUserBody,
     updateUserBody,
-} from '~/interface/request';
-import { createUserSchema } from '~/middleware/validator';
+} from '../../interface/request';
+import { createUserSchema } from '../../middleware/validator';
 
 export const router: Router = Router();
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { checkProduct } from '~/common';
-import { getQuantityProduct, updateQuantity } from '~/controller';
+import { checkProduct } from '../../common';
+import { getQuantityProduct, updateQuantity } from '../../controller';
 
 export const router: Router = Router();
 

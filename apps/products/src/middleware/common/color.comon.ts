@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus, Result } from 'app';
 import { FilterQuery } from 'mongoose';
-import { IColor } from '~/interface/models';
-import { Colors } from '~/models';
+import { IColor } from '../../interface/models';
+import { Colors } from '../../models';
 
 export async function CheckExitsColor(params: {
     name?: string;

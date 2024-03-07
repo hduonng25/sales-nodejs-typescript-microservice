@@ -1,16 +1,16 @@
-import { loginBody } from '~/interface/request';
-import Users from '~/model/user.model';
+import { loginBody } from '../interface/request';
+import Users from '../model/user.model';
 import bcrypt from 'bcrypt';
 import {
     genAccessToken,
     genRefreshToken,
     getPayload,
-} from '~/token';
+} from '../token';
 import { HttpsStatus, Result, success } from 'app';
 import {
     accountNotFoundError,
     wrongPasswordError,
-} from '~/middleware/common';
+} from '../middleware/common';
 
 export async function login(params: loginBody): Promise<Result> {
     try {

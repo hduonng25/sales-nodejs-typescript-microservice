@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import { configs } from '~/config';
+import { configs } from '../config';
 import { HttpError, HttpsStatus, error } from 'app';
-import { ProductDetails } from '~/interface/request';
+import { ProductDetails } from '../interface/request';
 
 const api = axios.create({
     baseURL: configs.services.product.api(),

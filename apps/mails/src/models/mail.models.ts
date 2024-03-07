@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IMails } from '~/interface/models';
+import { IMails } from '../interface/models';
 
 const TemplatesMail = new mongoose.Schema({
     id: {

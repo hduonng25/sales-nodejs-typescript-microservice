@@ -1,7 +1,7 @@
 import { HttpsStatus, Result, success } from 'app';
 import { FilterQuery, PipelineStage } from 'mongoose';
-import { IProduct, IProductDetail } from '~/interface/models';
-import { Products } from '~/models';
+import { IProduct, IProductDetail } from '../interface/models';
+import { Products } from '../models';
 
 export async function checkProduct(params: {
     id: string;

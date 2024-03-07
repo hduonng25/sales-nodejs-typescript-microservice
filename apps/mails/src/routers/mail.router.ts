@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { sendMailsCreateUser } from '~/controller';
-import { sendMailsCreateUserBody } from '~/interface/request';
+import { sendMailsCreateUser } from '../controller';
+import { sendMailsCreateUserBody } from '../interface/request';
 export const router: Router = Router();
 
 router.post(

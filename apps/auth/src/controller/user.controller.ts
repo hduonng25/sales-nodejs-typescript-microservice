@@ -4,13 +4,13 @@ import {
     changePasswordBody,
     createUserBody,
     updateUserBody,
-} from '~/interface/request';
-import Users from '~/model/user.model';
+} from '../interface/request';
+import Users from '../model/user.model';
 import bcrypt from 'bcrypt';
 import { HttpError, Result, error, success } from 'app';
-import { sendMailcreateUser } from '~/service';
-import { checkExitsAccount } from '~/middleware/common';
-import { IUser } from '~/interface/model';
+import { sendMailcreateUser } from '../service';
+import { checkExitsAccount } from '../middleware/common';
+import { IUser } from '../interface/model';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery } from 'mquery';
 

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ItimeLine } from '~/interface/model';
+import { ItimeLine } from '../interface/model';
 
 const timeLine = new mongoose.Schema({
     id: {

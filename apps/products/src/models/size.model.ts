@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ISize } from '~/interface/models';
+import { ISize } from '../interface/models';
 const Size = new mongoose.Schema({
     id: {
         type: String,

@@ -1,20 +1,20 @@
 import { HttpsStatus, Result, error, success } from 'app';
 import { v1 } from 'uuid';
-import { BillDetails, IInvoice } from '~/interface/model';
+import { BillDetails, IInvoice } from '../interface/model';
 import {
     AddProductBody,
     InvoiceReqBody,
     ProductDetails,
     UpdateQuantityBody,
-} from '~/interface/request';
-import { Invoices } from '~/models';
+} from '../interface/request';
+import { Invoices } from '../models';
 import {
     getCheckProduct,
     getCheckUser,
     getQuantity,
     updateQuantityProduct,
-} from '~/service';
-import { getCreateOrder, getOrder } from '~/service/payment.service';
+} from '../service';
+import { getCreateOrder, getOrder } from '../service/payment.service';
 
 async function createBillDetails(
     params: AddProductBody,
@@ -94,7 +94,7 @@ export async function addProduct(
 
         const newProduct = createBillDetails(params);
         let checkExitsProduct = invoice.details?.find(
-            (d) => d.product.id === params.id,
+            (d:BillDetails) => d.product.id === params.id,
         );
 
         if (checkExitsProduct) {
@@ -129,7 +129,7 @@ export async function changeQuantity(params: UpdateQuantityBody) {
         }
 
         const details = invoice.details?.find(
-            (i) => i.id === params.id_details,
+            (i:IInvoice) => i.id === params.id_details,
         );
 
         if (!details) {

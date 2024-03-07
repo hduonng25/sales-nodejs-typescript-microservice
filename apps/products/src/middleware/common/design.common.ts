@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus } from 'app';
 import { FilterQuery } from 'mongoose';
-import { IDesign } from '~/interface/models';
-import { Designs } from '~/models';
+import { IDesign } from '../../interface/models';
+import { Designs } from '../../models';
 
 export async function checkExitsDesign(params: {
     id?: string;

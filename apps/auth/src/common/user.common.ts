@@ -1,7 +1,6 @@
 import { HttpsStatus, Result, success } from 'app';
 import { FilterQuery } from 'mongoose';
-import { IUser } from '~/interface/model';
-import { Users } from '~/model';
+import { Users } from '../model';
 
 export async function checkUser(params: {
     id: string;

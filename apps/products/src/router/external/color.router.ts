@@ -8,13 +8,13 @@ import {
     getByID,
     getColorListID,
     updateColor,
-} from '~/controller';
+} from '../../controller';
 import {
     CreateColorBody,
     FindReqQuery,
     UpdateColorBody,
-} from '~/interface/request';
-import { createColorSchema } from '~/middleware/validator';
+} from '../../interface/request';
+import { createColorSchema } from '../../middleware/validator';
 
 export const router: Router = Router();
 

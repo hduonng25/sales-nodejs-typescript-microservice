@@ -1,6 +1,6 @@
 import { boolean, string } from 'joi';
 import mongoose from 'mongoose';
-import { IProduct } from '~/interface/models';
+import { IProduct } from '../interface/models';
 
 const Product = new mongoose.Schema({
     id: {

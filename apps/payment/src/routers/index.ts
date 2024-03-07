@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { configs } from '~/configs';
 import { router as PaymentRouter } from './payment.router';
+import { configs } from '../configs';
 
 export const router: Router = Router();
 

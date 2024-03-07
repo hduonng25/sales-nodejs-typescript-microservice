@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus, ResultError } from 'app';
 import { FilterQuery } from 'mongoose';
-import { IUser } from '~/interface/model';
-import { Users } from '~/model';
+import { IUser } from '../../interface/model';
+import { Users } from '../../model';
 
 export async function checkExitsAccount(params: {
     id?: string;

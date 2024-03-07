@@ -2,14 +2,14 @@ import { HttpError, Result, error, success } from 'app';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
-import { ISize } from '~/interface/models';
+import { ISize } from '../interface/models';
 import {
     CretaeSizeBody,
     FindReqQuery,
     UpdateSizeBody,
-} from '~/interface/request';
-import { CheckExitsSize } from '~/middleware/common';
-import { Sizes } from '~/models';
+} from '../interface/request';
+import { CheckExitsSize } from '../middleware/common';
+import { Sizes } from '../models';
 
 export async function findSizes(
     params: FindReqQuery,

@@ -17,7 +17,7 @@ import {
     getDetailsByColorAndSize,
     getQuantityProduct,
     updateQuantity,
-} from '~/controller';
+} from '../../controller';
 import {
     FindReqQuery,
     activeProductBody,
@@ -27,14 +27,14 @@ import {
     setImageProductDetailsBody,
     updateProductsBody,
     updateProductsDetails,
-} from '~/interface/request';
+} from '../../interface/request';
 import {
     activeProductSchema,
     createProductSchema,
     deleteManyProductChema,
     deleteProductSchema,
     findSchema,
-} from '~/middleware/validator';
+} from '../../middleware/validator';
 
 export const router: Router = Router();
 

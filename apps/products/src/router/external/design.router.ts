@@ -7,12 +7,12 @@ import {
     findDesigns,
     getDesignByID,
     updateDesign,
-} from '~/controller';
+} from '../../controller';
 import {
     FindReqQuery,
     createDesignBody,
     updateDesignBody,
-} from '~/interface/request';
+} from '../../interface/request';
 
 export const router: Router = Router();
 

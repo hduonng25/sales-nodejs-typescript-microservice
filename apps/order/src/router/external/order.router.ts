@@ -11,12 +11,12 @@ import {
     payOrderOnline,
     payment,
     updateInvoice,
-} from '~/controller';
+} from '../../controller';
 import {
     AddProductBody,
     InvoiceReqBody,
     UpdateQuantityBody,
-} from '~/interface/request';
+} from '../../interface/request';
 
 export const router: Router = Router();
 

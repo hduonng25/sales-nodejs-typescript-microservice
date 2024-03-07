@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IInvoice } from '~/interface/model';
+import { IInvoice } from '../interface/model';
 
 const date = new Date();
 

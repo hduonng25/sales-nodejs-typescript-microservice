@@ -7,12 +7,12 @@ import {
     findMetarials,
     getMetarialsByID,
     updateMetarial,
-} from '~/controller';
+} from '../../controller';
 import {
     FindReqQuery,
     createMaterialBody,
     updateMaterialBody,
-} from '~/interface/request';
+} from '../../interface/request';
 export const router: Router = Router();
 
 router.get(

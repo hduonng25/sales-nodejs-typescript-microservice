@@ -1,4 +1,4 @@
-import { config } from '~/config/config';
+import { config } from '../config/config';
 import axios from 'axios';
 import { HttpError, HttpsStatus, error } from 'app';
 

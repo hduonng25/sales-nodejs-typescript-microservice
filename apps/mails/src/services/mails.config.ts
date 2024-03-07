@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { config } from '~/configs/config';
+import { config } from '../configs/config';
 
 export const mails = nodemailer.createTransport({
     service: config.mails.service,

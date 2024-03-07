@@ -8,13 +8,13 @@ import {
     getByIDSize,
     getListSizeByID,
     updateSize,
-} from '~/controller';
+} from '../../controller';
 import {
     CretaeSizeBody,
     FindReqQuery,
     UpdateSizeBody,
-} from '~/interface/request';
-import { createSizeSchema } from '~/middleware/validator';
+} from '../../interface/request';
+import { createSizeSchema } from '../../middleware/validator';
 
 export const router: Router = Router();
 

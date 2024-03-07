@@ -4,8 +4,8 @@ import {
     findInvoices,
     getDetails,
     updateStatus,
-} from '~/controller';
-import { FindReqQuery, UpdateStatusBody } from '~/interface/request';
+} from '../../controller';
+import { FindReqQuery, UpdateStatusBody } from '../../interface/request';
 
 export const router: Router = Router();
 

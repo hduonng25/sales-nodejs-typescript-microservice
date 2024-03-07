@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { config } from '~/config';
+import { config } from '../config';
 import { router as ColorRouter } from './external/color.router';
 import { router as SizeRouter } from './external/size.router';
 import { router as DesignRouter } from './external/design.router';

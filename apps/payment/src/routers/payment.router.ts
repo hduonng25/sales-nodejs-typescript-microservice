@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { configs } from '~/configs';
-import { cancelOrder, createOrder, getOrder } from '~/controllers';
-import { OrderBodyReq } from '~/interface/request';
+import { OrderBodyReq } from '../interface/request';
+import { configs } from '../configs';
+import { cancelOrder, createOrder, getOrder } from '../controllers';
 
 export const router: Router = Router();
 

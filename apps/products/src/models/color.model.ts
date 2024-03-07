@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IColor } from '~/interface/models';
+import { IColor } from '../interface/models';
 
 const Color = new mongoose.Schema({
     id: {

@@ -2,7 +2,6 @@ import { HttpError, Result, error, success } from 'app';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
-import { IProduct, IProductDetail } from '~/interface/models';
 import {
     FindReqQuery,
     activeProductBody,
@@ -13,18 +12,19 @@ import {
     setImageProductDetailsBody,
     updateProductsBody,
     updateProductsDetails,
-} from '~/interface/request';
-import {
-    checkExitProductDetails,
-    checkExitsProduct,
-} from '~/middleware/common';
+} from '../interface/request';
+import { IProduct, IProductDetail } from '../interface/models';
 import {
     Colors,
     Designs,
     Metarials,
     Products,
     Sizes,
-} from '~/models';
+} from '../models';
+import {
+    checkExitProductDetails,
+    checkExitsProduct,
+} from '../middleware/common';
 
 //TODO: create product details
 export async function createProductDetail(
@@ -328,7 +328,7 @@ export async function setAvatarProductDetails(
     });
 
     const product_details = product?.product_details?.find(
-        (d) => d.id === params.id_product_details,
+        (d: any) => d.id === params.id_product_details,
     ) as IProductDetail;
 
     let avatar = [];

@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus } from 'app';
 import { FilterQuery } from 'mongoose';
-import { IProduct, IProductDetail } from '~/interface/models';
-import { Products } from '~/models';
+import { IProduct, IProductDetail } from '../../interface/models';
+import { Products } from '../../models';
 
 export async function checkExitsProduct(params: {
     id?: string;
@@ -48,7 +48,7 @@ export async function checkExitProductDetails(params: {
     });
 
     const product_details = product?.product_details?.find(
-        (d) =>
+        (d:IProductDetail) =>
             d.color.id === params.id_color &&
             d.size.id === params.id_size,
     );

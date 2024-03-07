@@ -1,15 +1,12 @@
 import { HttpError, Result, success, error } from 'app';
-import { FilterQuery, PipelineStage, Promise } from 'mongoose';
+import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
-import { IDesign } from '~/interface/models';
-import {
-    FindReqQuery,
-    createDesignBody,
-    updateDesignBody,
-} from '~/interface/request';
-import { checkExitsDesign } from '~/middleware/common';
-import { Designs } from '~/models';
+import { FindReqQuery, createDesignBody, updateDesignBody } from '../interface/request';
+import { IDesign } from '../interface/models';
+import { Designs } from '../models';
+import { checkExitsDesign } from '../middleware/common';
+
 
 export async function findDesigns(
     params: FindReqQuery,

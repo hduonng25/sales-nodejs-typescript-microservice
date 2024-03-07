@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { checkUser } from '~/common';
+import { checkUser } from '../../common';
 
 export const router: Router = Router();
 

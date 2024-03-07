@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IMetarial } from '~/interface/models';
+import { IMetarial } from '../interface/models';
 
 const Metarial = new mongoose.Schema({
     id: {

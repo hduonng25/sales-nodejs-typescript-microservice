@@ -1,6 +1,6 @@
 import { HttpError, HttpsStatus, error } from 'app';
 import axios, { AxiosResponse } from 'axios';
-import { configs } from '~/config';
+import { configs } from '../config';
 
 const api = axios.create({
     baseURL: configs.services.user.api(),

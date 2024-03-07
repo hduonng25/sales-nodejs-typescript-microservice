@@ -1,5 +1,5 @@
-import { config } from '~/configs/config';
-import { mailsOption } from '~/interface/mails';
+import { config } from '../configs/config';
+import { mailsOption } from '../interface/mails';
 
 export async function sendMailsBase(params: mailsOption) {
     const mails = {

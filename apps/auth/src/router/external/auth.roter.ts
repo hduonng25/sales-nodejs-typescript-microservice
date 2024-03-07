@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { login, newToken } from '~/controller';
-import { loginBody } from '~/interface/request';
+import { login, newToken } from '../../controller';
+import { loginBody } from '../../interface/request';
 
 export const router: Router = Router();
 

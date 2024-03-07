@@ -1,15 +1,11 @@
 import { HttpError, Result, error, success } from 'app';
-import { FilterQuery, PipelineStage, Promise } from 'mongoose';
+import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
 import { v1 } from 'uuid';
-import { IMetarial } from '~/interface/models';
-import {
-    FindReqQuery,
-    createMaterialBody,
-    updateMaterialBody,
-} from '~/interface/request';
-import { checkExitsMaterial } from '~/middleware/common';
-import { Metarials } from '~/models';
+import { FindReqQuery, createMaterialBody, updateMaterialBody } from '../interface/request';
+import { IMetarial } from '../interface/models';
+import { Metarials } from '../models';
+import { checkExitsMaterial } from '../middleware/common';
 
 export async function findMetarials(
     params: FindReqQuery,

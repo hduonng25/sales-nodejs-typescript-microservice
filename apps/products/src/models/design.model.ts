@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IDesign } from '~/interface/models';
+import { IDesign } from '../interface/models';
 
 const Design = new mongoose.Schema({
     id: {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { configs } from '~/config';
+import { configs } from '../config';
 
 import { router as InvoiceRouter } from './external/invoice.router';
 import { router as OrderRouter } from './external/order.router';

@@ -1,5 +1,5 @@
 import { Result, error, success } from 'app';
-import payOs from '~/payos';
+import payOs from '../payos';
 
 export async function createOrder(params: {
     orderCode: number;

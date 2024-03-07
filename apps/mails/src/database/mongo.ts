@@ -1,6 +1,6 @@
 import logger from 'logger';
 import mongoose, { ConnectOptions } from 'mongoose';
-import { config } from '~/configs';
+import { config } from '../configs';
 
 export function connectMongo(onSuccess: () => void): void {
     const connectUri = config.mongo.getUri();

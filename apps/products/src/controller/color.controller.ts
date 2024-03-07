@@ -1,15 +1,12 @@
 import { HttpError, Result, error, success } from 'app';
-import { IColor } from '~/interface/models';
-import {
-    CreateColorBody,
-    FindReqQuery,
-    UpdateColorBody,
-} from '~/interface/request';
-import { Colors } from '~/models';
+
 import { v1 } from 'uuid';
-import { CheckExitsColor } from '~/middleware/common';
 import { FilterQuery, PipelineStage } from 'mongoose';
 import { ParseSyntaxError, parseQuery, parseSort } from 'mquery';
+import { CreateColorBody, FindReqQuery, UpdateColorBody } from '../interface/request';
+import { IColor } from '../interface/models';
+import { Colors } from '../models';
+import { CheckExitsColor } from '../middleware/common';
 
 export async function findColors(
     params: FindReqQuery,

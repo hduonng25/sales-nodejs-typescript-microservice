@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus } from 'app';
 import { FilterQuery } from 'mongoose';
-import { ISize } from '~/interface/models';
-import { Sizes } from '~/models';
+import { ISize } from '../../interface/models';
+import { Sizes } from '../../models';
 
 export async function CheckExitsSize(params: {
     name?: string;

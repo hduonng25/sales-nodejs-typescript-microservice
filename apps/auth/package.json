@@ -2,6 +2,7 @@
     "name": "auth",
     "version": "1.0.0",
     "main": "build/ts.auth.js",
+    "type": "commonjs",
     "scripts": {
         "build": "npx tsc --incremental",
         "clean": "rm -rf build tsconfig.tsbuildinfo",

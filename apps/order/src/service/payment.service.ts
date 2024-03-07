@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus, error } from 'app';
 import axios from 'axios';
-import { configs } from '~/config';
-import { IGetOrderRes, IPaymentRes } from '~/interface/respone';
+import { configs } from '../config';
+import { IGetOrderRes, IPaymentRes } from '../interface/respone';
 
 const api = axios.create({
     baseURL: configs.services.payment.api(),

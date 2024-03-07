@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { router as UserRouter } from './external/user.router';
 import { router as AuthRouter } from './external/auth.roter';
 import { router as ServiceRouter } from './internal/index';
-import { config } from '~/config';
+import { config } from '../config';
 
 export const router: Router = Router();
 

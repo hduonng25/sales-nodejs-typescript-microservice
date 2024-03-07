@@ -1,7 +1,7 @@
 import { HttpError, HttpsStatus } from 'app';
 import { FilterQuery } from 'mongoose';
-import { IMetarial } from '~/interface/models';
-import { Metarials } from '~/models';
+import { IMetarial } from '../../interface/models';
+import { Metarials } from '../../models';
 
 export async function checkExitsMaterial(params: {
     id?: string;
